@@ -503,7 +503,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/10/19/2018-09-30-real_time_proccess/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">Comments: </span> <span class="post-comments-count valine-comment-count" data-xid="/2018/10/19/2018-09-30-real_time_proccess/" itemprop="commentCount"></span>
+                  <span class="post-meta-item-text">Comments: </span> <span class="post-comments-count gitment-comments-count" data-xid="/2018/10/19/2018-09-30-real_time_proccess/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -652,7 +652,7 @@ isProductMiss(no)->returnProductInfo->e
 
 isProductMiss(yes)->addProductId->buildProductInfo->returnProductInfo->
 
-returnProductInfo->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12,"theme":"simple"}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script><textarea id="flowchart-1-code" style="display: none">
+returnProductInfo->e</textarea><textarea id="flowchart-0-options" style="display: none">{"theme":"simple","scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script><textarea id="flowchart-1-code" style="display: none">
 st=>start: Start
 
 getpid=>operation: 从kafka队列获取产品id(各种事件来源)
@@ -669,7 +669,7 @@ writeRedis=>operation: 从kafka读取数据写入redis
 
 e=>end: End
 
-st->getpid->sepPid->forStorm->returnKafka->mergeInfo->writeRedis->e</textarea><textarea id="flowchart-1-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12,"theme":"simple"}</textarea><script>  var code = document.getElementById("flowchart-1-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-1-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-1", options);</script></p>
+st->getpid->sepPid->forStorm->returnKafka->mergeInfo->writeRedis->e</textarea><textarea id="flowchart-1-options" style="display: none">{"theme":"simple","scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-1-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-1-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-1", options);</script></p>
 
       
     </div>
@@ -781,6 +781,9 @@ st->getpid->sepPid->forStorm->returnKafka->mergeInfo->writeRedis->e</textarea><t
 
   
     <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
     </div>
 
   
@@ -1215,33 +1218,44 @@ st->getpid->sepPid->forStorm->returnKafka->mergeInfo->writeRedis->e</textarea><t
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script>
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname,
+            owner: 'leriou',
+            repo: 'leriou.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '11dd4237c0bc0ce0f1b44cb96f2246fa9f8443d9',
+            
+                client_id: 'e2b836402543dd687821'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
-  
-  
-  
-  
-  <script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-  <script>
-    var GUEST = ['nick','mail','link'];
-    var guest = 'nick';
-    guest = guest.split(',').filter(function (item) {
-      return GUEST.indexOf(item) > -1;
-    });
-    new Valine({
-      el: '#comments' ,
-      verify: false,
-      notify: false,
-      appId: 'd3Ferur4FUri7vERAylGpome-gzGzoHsz',
-      appKey: 'uRGeMnmfAq6h88QavSUfpS3q',
-      placeholder: '你不想说点什么吗 ???',
-      avatar: 'retro',
-      meta:guest,
-      pageSize: '10' || 10,
-      visitor: true
-    });
-  </script>
+
 
 
 
@@ -1610,7 +1624,7 @@ st->getpid->sepPid->forStorm->returnKafka->mergeInfo->writeRedis->e</textarea><t
       
         pbOptions.boxForm = "horizontal";
       
-        pbOptions.position = "Right";
+        pbOptions.position = "middle + left";
       
         pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
       
@@ -1632,15 +1646,6 @@ st->getpid->sepPid->forStorm->returnKafka->mergeInfo->writeRedis->e</textarea><t
   
 
   
-  
-  
-  <script src="/lib/bookmark/bookmark.min.js?v=1.0"></script>
-  <script>
-  
-    bookmark.scrollToMark('auto', "#more");
-  
-  </script>
-
 
   
   <style>

@@ -2048,16 +2048,6 @@ pre .javascript .function {
 .rtl.post-title {
   font-family: UKIJ Ekran;
 }
-.reading-progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  display: block;
-  width: 0;
-  height: 2px;
-  background: #37c6c0;
-}
 .sidebar {
   position: fixed;
   right: 0;
@@ -2219,7 +2209,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #42ff8a;
+  background: #fff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2519,6 +2509,19 @@ pre .javascript .function {
     -o-transform: scale(1.1);
     transform: scale(1.1);
   }
+}
+#gitment-display-button {
+  display: inline-block;
+  padding: 0 15px;
+  color: #0a9caf;
+  cursor: pointer;
+  font-size: 14px;
+  border: 1px solid #0a9caf;
+  border-radius: 4px;
+}
+#gitment-display-button:hover {
+  color: #fff;
+  background: #0a9caf;
 }
 i.fa {
   font-family: FontAwesome !important;
