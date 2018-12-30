@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="Leriou&#39;s Tavern">
 <meta property="og:description" content="我们在使用Redis集群的使用过程中发现了很多问题 这些问题产生的原因归根到底都是因为redis将数据映射到槽(slot)上面, 而不同的键分布在不同的Node节点上面导致的 键的问题当在集群模式下进行多键操作, 同时操作的键中有部分不在该节点时,会报如下错误 CROSSSLOT Keys in request don&amp;#39;t hash to the same slot 例如: hmget k">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-12-22T10:08:04.000Z">
+<meta property="og:updated_time" content="2018-12-30T05:39:22.585Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis集群遇到的一些问题">
 <meta name="twitter:description" content="我们在使用Redis集群的使用过程中发现了很多问题 这些问题产生的原因归根到底都是因为redis将数据映射到槽(slot)上面, 而不同的键分布在不同的Node节点上面导致的 键的问题当在集群模式下进行多键操作, 同时操作的键中有部分不在该节点时,会报如下错误 CROSSSLOT Keys in request don&amp;#39;t hash to the same slot 例如: hmget k">
@@ -478,7 +478,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-12-22 18:08:04" itemprop="dateModified" datetime="2018-12-22T18:08:04+08:00">2018-12-22</time>
+                <time title="Modified: 2018-12-30 13:39:22" itemprop="dateModified" datetime="2018-12-30T13:39:22+08:00">2018-12-30</time>
               
             
           </span>
@@ -567,7 +567,7 @@
 <p>原理嘛, 我不负责任的猜测一下, 一旦使用{}对key进行修饰,redis会仅对被{}包裹的部分计算hash</p>
 <p>如果多个key的{}内部分都相同的话, 数据计算出来的槽也是相同的</p>
 <p>比如:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;user&#125;:age:<span class="number">19</span></span><br><span class="line">&#123;user&#125;:name:小明</span><br><span class="line">&#123;user&#125;:id:<span class="number">3</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="selector-tag">user</span>&#125;<span class="selector-pseudo">:age</span><span class="selector-pseudo">:19</span></span><br><span class="line">&#123;<span class="selector-tag">user</span>&#125;<span class="selector-pseudo">:name</span>:小明</span><br><span class="line">&#123;<span class="selector-tag">user</span>&#125;<span class="selector-pseudo">:id</span><span class="selector-pseudo">:3</span></span><br></pre></td></tr></table></figure>
 <p>同样, 这样也可以变相解决cluster不能使用Pipeline的问题</p>
 <h1 id="错误类型"><a href="#错误类型" class="headerlink" title="错误类型"></a>错误类型</h1><ul>
 <li>moved错误</li>
