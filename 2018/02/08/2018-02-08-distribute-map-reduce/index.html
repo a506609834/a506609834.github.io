@@ -301,7 +301,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories<span class="badge">11</span></a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories<span class="badge">10</span></a>
 
   </li>
         
@@ -587,7 +587,7 @@ reduce函数接收一个k,v1&lt;list&gt;, 返回一个v2&lt;list&gt;
 <h3 id="MapReduce类"><a href="#MapReduce类" class="headerlink" title="MapReduce类"></a>MapReduce类</h3><p><code>MapReduce</code>类是一个通用的MapReduce框架,理论上任意MapReduce任务都可以套用这个框架</p>
 <p>要处理不同的问题我们只需要修改对应的map和reduce函数即可</p>
 <p>MapReduce类接收3个参数</p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">i:</span>       要处理的数据源,格式是一个普通的字典; </span><br><span class="line"><span class="symbol">mapper:</span>  映射函数,该函接收一个kv键值对,根据需要对每个v值进行处理,返回一个(k,v<span class="params">&lt;list&gt;</span>),此处的k值并不一定是传入的k值; </span><br><span class="line"><span class="symbol">reducer:</span> 压缩函数,接收一个(k,v<span class="params">&lt;list&gt;</span>),根据需求对数据进行压缩合并;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">i:       要处理的数据源,格式是一个普通的字典; </span><br><span class="line">mapper:  映射函数,该函接收一个kv键值对,根据需要对每个v值进行处理,返回一个(k,v&lt;list&gt;),此处的k值并不一定是传入的k值; </span><br><span class="line">reducer: 压缩函数,接收一个(k,v&lt;list&gt;),根据需求对数据进行压缩合并;</span><br></pre></td></tr></table></figure>
 <h3 id="map函数"><a href="#map函数" class="headerlink" title="map函数"></a>map函数</h3><p>其中<code>get_most_common_from_text</code>使用了结巴分词插件</p>
 <p>参数:</p>
 <pre><code>k:&quot;a&quot;
@@ -813,8 +813,6 @@ v&lt;list&gt;:[1,1,1]
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
-                    
-                      
                     
                       
                     

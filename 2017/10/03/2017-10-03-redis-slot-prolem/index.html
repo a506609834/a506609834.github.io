@@ -299,7 +299,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories<span class="badge">11</span></a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories<span class="badge">10</span></a>
 
   </li>
         
@@ -567,7 +567,7 @@
 <p>原理嘛, 我不负责任的猜测一下, 一旦使用{}对key进行修饰,redis会仅对被{}包裹的部分计算hash</p>
 <p>如果多个key的{}内部分都相同的话, 数据计算出来的槽也是相同的</p>
 <p>比如:</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="selector-tag">user</span>&#125;<span class="selector-pseudo">:age</span><span class="selector-pseudo">:19</span></span><br><span class="line">&#123;<span class="selector-tag">user</span>&#125;<span class="selector-pseudo">:name</span>:小明</span><br><span class="line">&#123;<span class="selector-tag">user</span>&#125;<span class="selector-pseudo">:id</span><span class="selector-pseudo">:3</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;user&#125;:age:19</span><br><span class="line">&#123;user&#125;:name:小明</span><br><span class="line">&#123;user&#125;:id:3</span><br></pre></td></tr></table></figure>
 <p>同样, 这样也可以变相解决cluster不能使用Pipeline的问题</p>
 <h1 id="错误类型"><a href="#错误类型" class="headerlink" title="错误类型"></a>错误类型</h1><ul>
 <li>moved错误</li>
@@ -797,8 +797,6 @@
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
-                    
-                      
                     
                       
                     

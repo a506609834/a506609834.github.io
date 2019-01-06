@@ -305,7 +305,7 @@
       
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories<span class="badge">11</span></a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories<span class="badge">10</span></a>
 
   </li>
         
@@ -565,7 +565,7 @@
 <p>我们通常会把许多实时性要求不那么高的任务处理通过消息系统进行解耦,以平衡数据处理的性能和功能</p>
 <p>例如: 用户下了一个订单,我们需要马上告诉用户下单成功, 但是之后的物流发货, 订单入账和商品信息更新等消息都可以通过一个消息系统进行拆分,这样不仅不会影响用户体验,也可以对之后触发的多个属于不同系统的业务进行并行处理,提升系统处理的性能</p>
 <h2 id="Kafka基础介绍"><a href="#Kafka基础介绍" class="headerlink" title="Kafka基础介绍"></a>Kafka基础介绍</h2><p>kafka作为一个消息平台, 其中有一些基础概念跟传统的消息队列服务对应</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">broker(instance)    承载服务的实例</span><br><span class="line">topic (queue)  		逻辑上的消息通道</span><br><span class="line">paitition(sharding) 一个消息通道进行存储的区域(物理上的,本质是对应着一个文件序列)</span><br><span class="line">consumer       		消费者 (通常指客户端的使用者)</span><br><span class="line">producer       		生产者 (也是客户端的使用者)</span><br><span class="line">consumer<span class="built_in"> group </span>  	消费者组 (虚拟概念, 消费者的逻辑分组)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">broker(instance)    承载服务的实例</span><br><span class="line">topic (queue)  		逻辑上的消息通道</span><br><span class="line">paitition(sharding) 一个消息通道进行存储的区域(物理上的,本质是对应着一个文件序列)</span><br><span class="line">consumer       		消费者 (通常指客户端的使用者)</span><br><span class="line">producer       		生产者 (也是客户端的使用者)</span><br><span class="line">consumer group   	消费者组 (虚拟概念, 消费者的逻辑分组)</span><br></pre></td></tr></table></figure>
 <h3 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h3><p>broker就相当于我们的kafka实例, 每个集群由多个broker组成, 每个broker具有完整的存储消息的功能, 多个broker可以组成broker集群, 但是这些实例不一定要分布在不同的机器上(虽然我们建议不要在同一个机器上部署多个broker)</p>
 <p>broker是链接<code>producer</code>和<code>consumer</code>的中间桥梁, 是消息真正的存储者, producer将消息发送给broker, broker对消息进行存储, 等待consumer消费和使用消息</p>
 <p>kafka的性能, 很大程度上取决于broker参数配置</p>
@@ -654,7 +654,7 @@
 <h3 id="segment内的存储细节"><a href="#segment内的存储细节" class="headerlink" title="segment内的存储细节"></a>segment内的存储细节</h3><p><img src="kafka_segment.jpeg" alt="kafka文件"></p>
 <p>一个topic的一个partition拥有多个segment file, 每个segment file拥有多个部分 </p>
 <p>一般由以下四个类型文件组成</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xxx<span class="selector-class">.index</span>  						<span class="comment">//segment的索引文件</span></span><br><span class="line">xxx<span class="selector-class">.log</span>    						<span class="comment">//segment的数据文件</span></span><br><span class="line">xxx<span class="selector-class">.timeindex</span>            		<span class="comment">//segment的时间索引</span></span><br><span class="line">leader-epoch-checkpoint   		<span class="comment">//检查点文件</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xxx.index  						//segment的索引文件</span><br><span class="line">xxx.log    						//segment的数据文件</span><br><span class="line">xxx.timeindex            		//segment的时间索引</span><br><span class="line">leader-epoch-checkpoint   		//检查点文件</span><br></pre></td></tr></table></figure>
 <h2 id="kafka遇到的问题"><a href="#kafka遇到的问题" class="headerlink" title="kafka遇到的问题"></a>kafka遇到的问题</h2><h3 id="kafka的topic不消费"><a href="#kafka的topic不消费" class="headerlink" title="kafka的topic不消费"></a>kafka的topic不消费</h3><p><strong>产生原因</strong> </p>
 <p>topic中的消息容量是有限制的,假如短时间内某topic中进入了大量的消息<br>消费者来不及消费可能导致消费者的消费offset小于当前topic的最小消息便宜</p>
 <p>举例:<br>假如我们topic最大可以存储200万消息,消费者每分钟消费30万的消息<br>现在有个入消息的接口每分钟入100万的消息,那topic, consumer就会产生如下问题</p>
@@ -940,8 +940,6 @@
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
-                    
-                      
                     
                       
                     
