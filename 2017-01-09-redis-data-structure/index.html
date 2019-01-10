@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"perspectiveLeftIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"perspectiveRightIn","sidebar":"perspectiveRightIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="redis基础数据结构redis中的数据对象有5种,但是这并不是redis中真正的数据存放方式, 只是对底层的数据存放结构进行了封装的对象 基础数据结构redis的几种基础数据结构是redis中的最重要的部分, redis后续的几乎所有功能的设计和实现都依赖于此 sds简单动态字符串对应的上层对象是 字符串 数据结构具体的数据结构如下: 12345typedef struct sdstr&amp;#123">
+<meta name="keywords" content="redis,数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis的基础数据结构">
+<meta property="og:url" content="https://leriou.github.io/2017-01-09-redis-data-structure/index.html">
+<meta property="og:site_name" content="Leriou&#39;s Tavern">
+<meta property="og:description" content="redis基础数据结构redis中的数据对象有5种,但是这并不是redis中真正的数据存放方式, 只是对底层的数据存放结构进行了封装的对象 基础数据结构redis的几种基础数据结构是redis中的最重要的部分, redis后续的几乎所有功能的设计和实现都依赖于此 sds简单动态字符串对应的上层对象是 字符串 数据结构具体的数据结构如下: 12345typedef struct sdstr&amp;#123">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://leriou.github.io/2017-01-09-redis-data-structure/IMG_0256.jpeg">
+<meta property="og:updated_time" content="2018-12-22T10:00:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis的基础数据结构">
+<meta name="twitter:description" content="redis基础数据结构redis中的数据对象有5种,但是这并不是redis中真正的数据存放方式, 只是对底层的数据存放结构进行了封装的对象 基础数据结构redis的几种基础数据结构是redis中的最重要的部分, redis后续的几乎所有功能的设计和实现都依赖于此 sds简单动态字符串对应的上层对象是 字符串 数据结构具体的数据结构如下: 12345typedef struct sdstr&amp;#123">
+<meta name="twitter:image" content="https://leriou.github.io/2017-01-09-redis-data-structure/IMG_0256.jpeg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://leriou.github.io/2017-01-09-redis-data-structure/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Redis的基础数据结构 | Leriou's Tavern</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Leriou's Tavern</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">试试我新买的钢笔 ^_^</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags<span class="badge">45</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories<span class="badge">10</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives<span class="badge">50</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/404.html" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>Commonweal 404</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://leriou.github.io/2017-01-09-redis-data-structure/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="哎呀是太阳嘛">
+      <meta itemprop="description" content="君子生非异也, 善假于物也">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Leriou's Tavern">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Redis的基础数据结构
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-01-09 00:00:00" itemprop="dateCreated datePublished" datetime="2017-01-09T00:00:00+08:00">2017-01-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-12-22 18:00:34" itemprop="dateModified" datetime="2018-12-22T18:00:34+08:00">2018-12-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/工具原理/" itemprop="url" rel="index"><span itemprop="name">工具原理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017-01-09-redis-data-structure/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments: </span> <span class="post-comments-count valine-comment-count" data-xid="/2017-01-09-redis-data-structure/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017-01-09-redis-data-structure/" class="leancloud_visitors" data-flag-title="Redis的基础数据结构">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="redis基础数据结构"><a href="#redis基础数据结构" class="headerlink" title="redis基础数据结构"></a>redis基础数据结构</h1><p>redis中的数据对象有5种,但是这并不是redis中真正的数据存放方式, 只是对底层的数据存放结构进行了封装的对象</p>
+<h2 id="基础数据结构"><a href="#基础数据结构" class="headerlink" title="基础数据结构"></a>基础数据结构</h2><p>redis的几种基础数据结构是redis中的最重要的部分, redis后续的几乎所有功能的设计和实现都依赖于此</p>
+<h3 id="sds简单动态字符串"><a href="#sds简单动态字符串" class="headerlink" title="sds简单动态字符串"></a>sds简单动态字符串</h3><p><em>对应的上层对象是</em> <code>字符串</code></p>
+<h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><p>具体的数据结构如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">sdstr</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span>   len     <span class="comment">// 字符串分配的字节</span></span><br><span class="line">	<span class="keyword">int</span>   <span class="built_in">free</span>    <span class="comment">// 未使用的字节数</span></span><br><span class="line">	<span class="keyword">char</span>  buff[]  <span class="comment">// 存储字符串的数组</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>sds是字符串对象的底层实现之一</p>
+<h4 id="sds的特性"><a href="#sds的特性" class="headerlink" title="sds的特性"></a>sds的特性</h4><p>赋值操作会统计字符串的长度然后将字符串存入buff字符数组里面,同时设定长度和使用的长度</p>
+<p>例如 “hello”这个字符串的存储结构如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	len:<span class="number">5</span>,</span><br><span class="line">	<span class="built_in">free</span>:<span class="number">0</span>,</span><br><span class="line">	buff:[<span class="string">'h'</span>,<span class="string">'e'</span>,<span class="string">'l'</span>,<span class="string">'l'</span>,<span class="string">'o'</span>,<span class="string">'\0'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改的时候会比较麻烦,分为两种情况</p>
+<p>一是由段字符串变长:例如:由”hello”变为”hello,redis”.</p>
+<p>这个时候系统会检查原本的sds字符串是否有空余空间,剩余空间为0</p>
+<p>会分配等同于修改后字符串长度的剩余空间给sds,这个时候字符串的free属性会变为11,然后执行sdscat()</p>
+<p>这个时候buff会变为[‘h’,’e’,’l’,’l’,’o’,’,’,’r’,’e’,’d’,’i’,’s’,’\0’]</p>
+<p>然后将字符串长度len修改为11</p>
+<p>最终结构如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	len:<span class="number">11</span>,     </span><br><span class="line">	<span class="built_in">free</span>:<span class="number">11</span>,</span><br><span class="line">	buff:[<span class="string">'h'</span>,<span class="string">'e'</span>,<span class="string">'l'</span>,<span class="string">'l'</span>,<span class="string">'o'</span>,<span class="string">','</span>,<span class="string">'r'</span>,<span class="string">'e'</span>,<span class="string">'d'</span>,<span class="string">'i'</span>,<span class="string">'s'</span>,<span class="string">'\0'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ps:当长度小于1M是翻倍扩容,超过1M时是以1M为标准定量扩容</p>
+<p>二是由长字符串变短</p>
+<p>例如:由”hello,redis”变为”redis”,这个时候会释放多余空间,同时把free值设为多出来的空间,以便下次使用方便</p>
+<p>修改后的结构大概如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	len:<span class="number">5</span>,      <span class="comment">// 字符串长度</span></span><br><span class="line">	<span class="built_in">free</span>:<span class="number">17</span>,    <span class="comment">// 原本11,加上释放到的6个字节</span></span><br><span class="line">	buff:[<span class="string">'r'</span>,<span class="string">'e'</span>,<span class="string">'d'</span>,<span class="string">'i'</span>,<span class="string">'s'</span>,<span class="string">'\0'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需要释放的时候可以手动调用函数来释放空间</p>
+<h4 id="为什么要使用sds"><a href="#为什么要使用sds" class="headerlink" title="为什么要使用sds?"></a>为什么要使用sds?</h4><ol>
+<li>sds可以杜绝缓冲区溢出的问题,获取字符串长度复杂度为常数</li>
+<li>二进制安全,sds使用len属性来判断字符串的结束</li>
+<li>减少字符串修改时的内存重分配次数</li>
+</ol>
+<h3 id="链表和quicklist"><a href="#链表和quicklist" class="headerlink" title="链表和quicklist"></a>链表和quicklist</h3><h4 id="数据结构-1"><a href="#数据结构-1" class="headerlink" title="数据结构"></a>数据结构</h4><p>抄袭自redis的源代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//链表</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span>&#123;</span></span><br><span class="line">	listNode * head;  	<span class="comment">//头节点</span></span><br><span class="line">	listNode * tail;	<span class="comment">//尾节点</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> len; 	<span class="comment">//节点数量</span></span><br><span class="line">	<span class="keyword">void</span> *(*dup)(<span class="keyword">void</span> *ptr);	<span class="comment">//节点值复制函数</span></span><br><span class="line">	<span class="keyword">void</span> (*<span class="built_in">free</span>)(<span class="keyword">void</span> *ptr); 	<span class="comment">//节点值释放函数</span></span><br><span class="line">	<span class="keyword">void</span> (*match)(<span class="keyword">void</span> *ptr,<span class="keyword">void</span> *key);	<span class="comment">//节点值对比函数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//链表节点</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span>&#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">pre</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span></span><br><span class="line">	<span class="keyword">void</span> *value;</span><br><span class="line">&#125;listNode;</span><br></pre></td></tr></table></figure>
+<p>换成形象点的json的形式就是如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">list</span>: &#123;</span><br><span class="line">        head: &#123;</span><br><span class="line">            pre: null,</span><br><span class="line">            next: <span class="number">2</span>,</span><br><span class="line">            value: <span class="number">1</span></span><br><span class="line">        &#125;,</span><br><span class="line">        tail: &#123;</span><br><span class="line">            pre: <span class="number">99</span>,</span><br><span class="line">            next: null,</span><br><span class="line">            value: <span class="number">100</span></span><br><span class="line">        &#125;,</span><br><span class="line">        len: <span class="number">100</span>,</span><br><span class="line">        dup:function () &#123;&#125;,</span><br><span class="line">        <span class="built_in">free</span>:function () &#123;&#125;,</span><br><span class="line">        match:function () &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>链表是列表对象的底层实现之一(version 3.2 之前)</p>
+<p>链表在redis中主要负责的是存储和维护某一类对象,所常用到的操主要有遍历,修改等</p>
+<p>链表在redis中使用极为广泛,redis的事务,发布与订阅,服务器中维护的redisClient信息等都是用链表结构进行的存储</p>
+<h3 id="quicklist"><a href="#quicklist" class="headerlink" title="quicklist"></a>quicklist</h3><p>redis在3.2版本新加入了quicklist数据结构作为list的底层实现</p>
+<h4 id="数据结构-2"><a href="#数据结构-2" class="headerlink" title="数据结构"></a>数据结构</h4><p>以下代码来自redis源码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">quicklistEntry</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> quicklist *quicklist;</span><br><span class="line">    quicklistNode *node;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *zi;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *value;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> longval;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> sz;</span><br><span class="line">    <span class="keyword">int</span> offset;</span><br><span class="line">&#125; quicklistEntry;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* quicklist is a 32 byte struct (on 64-bit systems) describing a quicklist.</span></span><br><span class="line"><span class="comment"> * 'count' is the number of total entries.</span></span><br><span class="line"><span class="comment"> * 'len' is the number of quicklist nodes.</span></span><br><span class="line"><span class="comment"> * 'compress' is: -1 if compression disabled, otherwise it's the number</span></span><br><span class="line"><span class="comment"> *                of quicklistNodes to leave uncompressed at ends of quicklist.</span></span><br><span class="line"><span class="comment"> * 'fill' is the user-requested (or default) fill factor. */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">quicklist</span> &#123;</span></span><br><span class="line">    quicklistNode *head;</span><br><span class="line">    quicklistNode *tail;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> count;        <span class="comment">/* total count of all entries in all ziplists */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> len;           <span class="comment">/* number of quicklistNodes */</span></span><br><span class="line">    <span class="keyword">int</span> fill : <span class="number">16</span>;              <span class="comment">/* fill factor for individual nodes */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> compress : <span class="number">16</span>; <span class="comment">/* depth of end nodes not to compress;0=off */</span></span><br><span class="line">&#125; quicklist;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* quicklistNode is a 32 byte struct describing a ziplist for a quicklist.</span></span><br><span class="line"><span class="comment"> * We use bit fields keep the quicklistNode at 32 bytes.</span></span><br><span class="line"><span class="comment"> * count: 16 bits, max 65536 (max zl bytes is 65k, so max count actually &lt; 32k).</span></span><br><span class="line"><span class="comment"> * encoding: 2 bits, RAW=1, LZF=2.</span></span><br><span class="line"><span class="comment"> * container: 2 bits, NONE=1, ZIPLIST=2.</span></span><br><span class="line"><span class="comment"> * recompress: 1 bit, bool, true if node is temporarry decompressed for usage.</span></span><br><span class="line"><span class="comment"> * attempted_compress: 1 bit, boolean, used for verifying during testing.</span></span><br><span class="line"><span class="comment"> * extra: 12 bits, free for future use; pads out the remainder of 32 bits */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">quicklistNode</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">quicklistNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">quicklistNode</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *zl;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> sz;             <span class="comment">/* ziplist size in bytes */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> count : <span class="number">16</span>;     <span class="comment">/* count of items in ziplist */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> encoding : <span class="number">2</span>;   <span class="comment">/* RAW==1 or LZF==2 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> container : <span class="number">2</span>;  <span class="comment">/* NONE==1 or ZIPLIST==2 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> recompress : <span class="number">1</span>; <span class="comment">/* was this node previous compressed? */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> attempted_compress : <span class="number">1</span>; <span class="comment">/* node can't compress; too small */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> extra : <span class="number">10</span>; <span class="comment">/* more bits to steal for future usage */</span></span><br><span class="line">&#125; quicklistNode;</span><br></pre></td></tr></table></figure>
+<h4 id="quicklist特性"><a href="#quicklist特性" class="headerlink" title="quicklist特性"></a>quicklist特性</h4><p>quicklist本身是一个双向无环链表，它的每一个节点都是一个ziplist。为什么这么设计呢？</p>
+<ul>
+<li>双向链表在插入节点上复杂度很低，但它的内存开销很大，每个节点的地址不连续，容易产生内存碎片。</li>
+<li>ziplist是存储在一段连续的内存上，存储效率高，但是它不利于修改操作，插入和删除数都很麻烦，复杂度高，而且其需要频繁的申请释放内存，特别是ziplist中数据较多的情况下，搬移内存数据太费时！</li>
+</ul>
+<p>可以这么理解</p>
+<p>一个quicklist内部包含有多个ziplist, 每个ziplist里面又可以包含多个数据节点,</p>
+<p>例如: [1,2,3,4,5,6,7,8,9]</p>
+<p>上面这个链表的存储如果用quicklist来存储就可以分为3个ziplist</p>
+<p>每个ziplist又有3个数据节点,[[1,2,3],[4,5,6],[7,8,9]]</p>
+<p>主要目的还是为了在时间和空间上面取得一个平衡,至于每个ziplist分多大可以自定义配置</p>
+<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><h4 id="数据结构-3"><a href="#数据结构-3" class="headerlink" title="数据结构"></a>数据结构</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">    dictType *type;</span><br><span class="line">    <span class="keyword">void</span> *privdata;</span><br><span class="line">    dictht ht[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">long</span> rehashidx; <span class="comment">/* rehashing not in progress if rehashidx == -1 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> iterators; <span class="comment">/* number of iterators currently running */</span></span><br><span class="line">&#125; dict;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* This is our hash table structure. Every dictionary has two of this as we</span></span><br><span class="line"><span class="comment"> * implement incremental rehashing, for the old to the new table. */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">    dictEntry **table;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> size;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> sizemask;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> used;</span><br><span class="line">&#125; dictht;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">    <span class="keyword">void</span> *key;</span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        <span class="keyword">void</span> *val;</span><br><span class="line">        <span class="keyword">uint64_t</span> u64;</span><br><span class="line">        <span class="keyword">int64_t</span> s64;</span><br><span class="line">        <span class="keyword">double</span> d;</span><br><span class="line">    &#125; v;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure>
+<p>hash 使用json格式表示大概如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    dict: &#123;</span><br><span class="line">        type: hash,</span><br><span class="line">        privadata: null,</span><br><span class="line">        ht: [&#123;</span><br><span class="line">                size: <span class="number">100</span>,</span><br><span class="line">                used: <span class="number">80</span>,</span><br><span class="line">                sizemask: <span class="string">"0xff778"</span>,</span><br><span class="line">                hash: &#123;</span><br><span class="line">                    key: <span class="string">"test1"</span>,</span><br><span class="line">                    value: <span class="number">22</span>,</span><br><span class="line">                    next: <span class="number">34</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;&#125;  <span class="comment">// rehash时候使用</span></span><br><span class="line">        ],</span><br><span class="line">        rehashidx: <span class="number">-1</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>字典是数据库的底层实现</p>
+<p>整体数据结构由dict持有2个dictht，</p>
+<p>其中一个dictht[1]在rehash时候使用，dictht[0]中用来存储数据</p>
+<p>持有一个dictEntry组成的数组，每个dictEntry保存一个键值对</p>
+<h4 id="hash过程"><a href="#hash过程" class="headerlink" title="hash过程"></a>hash过程</h4><p>采用hash函数对键进行哈希配合dictht的sizemask计算出来索引值</p>
+<pre><code>index = hash(key) &amp; sizemask
+</code></pre><p>然后将键值对存入哈希表节点</p>
+<blockquote>
+<p>ps: 这个过程跟redis中计算键所对应的slot的方法相似</p>
+</blockquote>
+<h4 id="解决键冲突"><a href="#解决键冲突" class="headerlink" title="解决键冲突"></a>解决键冲突</h4><p>redis使用链地址法(separate chaining)</p>
+<p>来解决键冲突,当两个键的index值相同时,会把第二个键放到第一个键的前面,查询时对这个index的哈希节点链表进行遍历</p>
+<h4 id="rehash"><a href="#rehash" class="headerlink" title="rehash"></a>rehash</h4><p>当哈希表的负载因子(load factor)大于设定值时(平时为1,在BGREWRITEAOF时为5),哈希表会进行rehash操作</p>
+<p>rehash采用渐进式的方式进行执行,具体流程就是把ht[0]里面的数据重新进行哈希计算放到ht[1],此时的哈希查询操作两个表同时提供服务,写入操作则只有ht[1]提供,这样ht[0]处于只减不增的状态,最终当ht[0]里面的所有数据都被转移到ht[1]时,rehashidx被设为-1,表明rehash结束,删除ht[0],并将ht[1]设为ht[0],同时重新分配新的ht[1]</p>
+<blockquote>
+<p>ps:负载因子 = used /size;</p>
+</blockquote>
+<h3 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h3><h4 id="数据结构-4"><a href="#数据结构-4" class="headerlink" title="数据结构"></a>数据结构</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//跳跃表</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span>&#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">header</span>,*<span class="title">tail</span>;</span><span class="comment">//头结点和尾节点</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> length;<span class="comment">//表中节点数量</span></span><br><span class="line">    <span class="keyword">int</span> level;<span class="comment">//表中除头节点外层数最大的节点</span></span><br><span class="line">&#125; zskiplist;</span><br><span class="line"></span><br><span class="line"><span class="comment">//跳跃表节点</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">    <span class="comment">//层</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplevel</span>&#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span><span class="comment">//前进指针</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> span;<span class="comment">//跨度</span></span><br><span class="line">    &#125; level[];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backword</span>;</span><span class="comment">//后退指针</span></span><br><span class="line">    <span class="keyword">double</span> score;<span class="comment">//分值</span></span><br><span class="line">    robj *obj;</span><br><span class="line">&#125; zskiplistNode;</span><br></pre></td></tr></table></figure>
+<p>跳跃表json形式:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    zskiplist: &#123;</span><br><span class="line">        header: &#123;</span><br><span class="line">            obj: <span class="string">"aa"</span>,</span><br><span class="line">            score: <span class="number">45</span>,</span><br><span class="line">            backforward: null,</span><br><span class="line">            zskiplevel: [&#123;</span><br><span class="line">                forward: null,</span><br><span class="line">                span: <span class="number">9</span></span><br><span class="line">            &#125;,&#123;</span><br><span class="line">                forward: *p,</span><br><span class="line">                span: <span class="number">8</span></span><br><span class="line">            &#125;]</span><br><span class="line">        &#125;,</span><br><span class="line">        tail: &#123;</span><br><span class="line">            obj: <span class="string">"aa"</span>,</span><br><span class="line">            score: <span class="number">45</span>,</span><br><span class="line">            backforward: null,</span><br><span class="line">            zskiplevel: [&#123;</span><br><span class="line">                forward: null,</span><br><span class="line">                span: <span class="number">9</span></span><br><span class="line">            &#125;]</span><br><span class="line">        &#125;,</span><br><span class="line">        length: <span class="number">100</span>,</span><br><span class="line">        level: <span class="number">32</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>跳跃表图示:</p>
+<p><img src="IMG_0256.jpeg" alt="跳跃表"></p>
+<p>跳跃表是有序集合的底层实现之一</p>
+<p>跳跃表中的头结点不计算在length长度之内,跳跃表的节点排序按照分值从小到大排序</p>
+<p>每次创建新节点的时候,redis会根据幂次定律随机生成一个1-32的层数作为level数组的大小</p>
+<p>每个节点都有指向表尾方向的前进指针和之前表头方向的后退指针</p>
+<p>这两个指针可以让程序方便的遍历所有节点,层的跨度用于记录两点之间的距离</p>
+<p>跨度可以用来计算rank值.节点的分值是一个double值</p>
+<p>节点的对象是一个指针,指向一个保存着sds字符串的字符串对象(下一节讲redis对象)</p>
+<p>跳跃表通过每个<code>zskiplistNode</code>来保存每个元素的信息，元素的键就是obj的指针指向的对象，对应的分值就是score字段</p>
+<h3 id="整数集合"><a href="#整数集合" class="headerlink" title="整数集合"></a>整数集合</h3><h4 id="数据结构-5"><a href="#数据结构-5" class="headerlink" title="数据结构"></a>数据结构</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint32_t</span> encoding;</span><br><span class="line">    <span class="keyword">uint32_t</span> length;</span><br><span class="line">    <span class="keyword">int8_t</span> contents[];</span><br><span class="line">&#125; intset;</span><br></pre></td></tr></table></figure>
+<p>顾名思义整数集合是用来保存整数值的抽象数据结构</p>
+<p>集合中不会出现重复元素</p>
+<p>contents数组中保存的整数值有小到大排列</p>
+<p>length等于contents的长度</p>
+<p>虽然contents的定义是int8_t 但实际上contents的值类型由encoding决定</p>
+<h4 id="升级"><a href="#升级" class="headerlink" title="升级"></a>升级</h4><p>当一个新元素超过原来整数集合encoding定义的值的类型时,会进行升级</p>
+<p>升级结果会使集合的encoding变成所有数组中元素的值最大的数据类型,并且不支持降级</p>
+<p>例如:有一个整数集合[1,2,3],本身的编码为<code>int8</code>,现在增加一个300的数字进该集合</p>
+<p>会导致集合的编码升级为<code>int16</code>,这个时候列表的大小由8x3=24 变为 16x4=64</p>
+<p>即便<code>int8</code>可以存储前三个值,但是为了简单起见,仍然会为集合中每一个元素分配同样的空间</p>
+<h3 id="压缩列表-Ziplist"><a href="#压缩列表-Ziplist" class="headerlink" title="压缩列表(Ziplist)"></a>压缩列表(Ziplist)</h3><p>压缩列表被用作列表键和哈希键的底层实现</p>
+<p>压缩列表属于特殊的结构,是一种数据存储的方式,目的是为了节约内存,是一种采用特殊编码的连续内存块组成的顺序型(sequential)数据结构.</p>
+<p>大致结构如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">zlbytes</th>
+<th style="text-align:left">zltail</th>
+<th style="text-align:left">zllen</th>
+<th style="text-align:left">entry1</th>
+<th style="text-align:left">entry2</th>
+<th style="text-align:left">…</th>
+<th style="text-align:left">zlend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">总长度</td>
+<td style="text-align:left">偏移量</td>
+<td style="text-align:left">节点数量</td>
+<td style="text-align:left">节点1</td>
+<td style="text-align:left">节点2</td>
+<td style="text-align:left">…</td>
+<td style="text-align:left">结束</td>
+</tr>
+</tbody>
+</table>
+<p>每个压缩列表节点由如下三部分组成</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">previous_entry_length</th>
+<th style="text-align:left">encoding</th>
+<th style="text-align:left">content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">前一节点的长度</td>
+<td style="text-align:left">记录content的类型和长度</td>
+<td style="text-align:left">节点的值</td>
+</tr>
+</tbody>
+</table>
+<p>一个ziplist示例:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    zlbytes:<span class="string">"0x50"</span>,</span><br><span class="line">    zltail:<span class="string">"0x3c"</span>,</span><br><span class="line">    zllen:<span class="string">"0x3"</span>,</span><br><span class="line">    &#123;</span><br><span class="line">        previous_entry_length:<span class="string">"0x05"</span>,</span><br><span class="line">        encoding:<span class="string">"00001011"</span>,</span><br><span class="line">        content:<span class="string">"hello word"</span></span><br><span class="line">    &#125;,&#123;</span><br><span class="line">        previous_entry_length:<span class="string">"0xF"</span>,</span><br><span class="line">        encoding:<span class="string">"11000000"</span>,</span><br><span class="line">        content:<span class="string">"10086"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    zlend:<span class="string">"0xff"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果前一个节点长度小于254字节,previous_entry_length会使用1字节空间保存这个长度,<br>如果大于254字节,将使用5字节长度保存这个值,这个机制会引起”连锁更新”</p>
+<p><em>连锁更新:</em> 假设现有连续的三个压缩列表节点l1,l2,l3,长度分别为 253,253,253,现在往第一个节点前添加一个长度超过254的节点,这个时候l1要给previous_entry_length分配5个字节来存储长度,所以列表本身长度会变为257,这将导致l2也需要5字节存储l1的长度,l3也会产生同样的变化,这样由一个列表操作引起的一系列更新操作成为连锁更新</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>你可以请我喝茶呦 ^_^</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="哎呀是太阳嘛 WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpeg" alt="哎呀是太阳嘛 Alipay">
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>哎呀是太阳嘛</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    
+    <a href="https://leriou.github.io/2017-01-09-redis-data-structure/" title="Redis的基础数据结构">https://leriou.github.io/2017-01-09-redis-data-structure/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+               <div id="needsharebutton-postbottom">
+                 <span class="btn">
+                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                 </span>
+               </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017-01-01-comic-book-2017/" rel="next" title="2017-追番-看书记录">
+                <i class="fa fa-chevron-left"></i> 2017-追番-看书记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017-01-11-redis-object/" rel="prev" title="Redis中的数据对象">
+                Redis中的数据对象 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="哎呀是太阳嘛">
+            
+              <p class="site-author-name" itemprop="name">哎呀是太阳嘛</p>
+              <p class="site-description motion-element" itemprop="description">君子生非异也, 善假于物也</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/leriou" title="GitHub &rarr; https://github.com/leriou" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://plus.google.com/yange1876" title="Google &rarr; https://plus.google.com/yange1876" rel="noopener" target="_blank"><i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/yange1876" title="Twitter &rarr; https://twitter.com/yange1876" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/1985364641" title="Weibo &rarr; https://weibo.com/1985364641" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#redis基础数据结构"><span class="nav-number">1.</span> <span class="nav-text">redis基础数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础数据结构"><span class="nav-number">1.1.</span> <span class="nav-text">基础数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sds简单动态字符串"><span class="nav-number">1.1.1.</span> <span class="nav-text">sds简单动态字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sds的特性"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">sds的特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么要使用sds"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">为什么要使用sds?</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链表和quicklist"><span class="nav-number">1.1.2.</span> <span class="nav-text">链表和quicklist</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构-1"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">数据结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#quicklist"><span class="nav-number">1.1.3.</span> <span class="nav-text">quicklist</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构-2"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#quicklist特性"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">quicklist特性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字典"><span class="nav-number">1.1.4.</span> <span class="nav-text">字典</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构-3"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hash过程"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">hash过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决键冲突"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">解决键冲突</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rehash"><span class="nav-number">1.1.4.4.</span> <span class="nav-text">rehash</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跳跃表"><span class="nav-number">1.1.5.</span> <span class="nav-text">跳跃表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构-4"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">数据结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整数集合"><span class="nav-number">1.1.6.</span> <span class="nav-text">整数集合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构-5"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#升级"><span class="nav-number">1.1.6.2.</span> <span class="nav-text">升级</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#压缩列表-Ziplist"><span class="nav-number">1.1.7.</span> <span class="nav-text">压缩列表(Ziplist)</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wifi"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">connect to Leriou</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  <script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  <script>
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+      el: '#comments' ,
+      verify: false,
+      notify: false,
+      appId: 'd3Ferur4FUri7vERAylGpome-gzGzoHsz',
+      appKey: 'uRGeMnmfAq6h88QavSUfpS3q',
+      placeholder: '你不想说点什么吗 ???',
+      avatar: 'retro',
+      meta:guest,
+      pageSize: '10' || 10,
+      visitor: true
+    });
+  </script>
+
+
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "default";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "middle + left";
+      
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="/js/src/js.cookie.js?v=6.6.0"></script>
+  <script src="/js/src/scroll-cookie.js?v=6.6.0"></script>
+
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('Copy').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function () {
+          $b.text('Copy');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

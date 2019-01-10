@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"perspectiveLeftIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"perspectiveRightIn","sidebar":"perspectiveRightIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="编程语言作为一个程序员, 总是在不断的制作工具-&amp;gt;使用工具-&amp;gt;制作工具-&amp;gt;使用工具的循环中 在这个循环中最重要的一个工具, 可能就是编程语言了 编程语言的种类有很多, 目前依然存在的少说也有数千种, 更不用说那些湮没在历史长河中的了, 但是真正出名的不是很多 很多人会疑惑, 为什么会有这么多编程语言呢 其实很多语言都是 在特定时期,在特定领域,为了解决特定问题而出现的 随着语言的">
+<meta name="keywords" content="编程语言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于编程语言的一些看法">
+<meta property="og:url" content="https://leriou.github.io/2016-06-08-idea-programing-language/index.html">
+<meta property="og:site_name" content="Leriou&#39;s Tavern">
+<meta property="og:description" content="编程语言作为一个程序员, 总是在不断的制作工具-&amp;gt;使用工具-&amp;gt;制作工具-&amp;gt;使用工具的循环中 在这个循环中最重要的一个工具, 可能就是编程语言了 编程语言的种类有很多, 目前依然存在的少说也有数千种, 更不用说那些湮没在历史长河中的了, 但是真正出名的不是很多 很多人会疑惑, 为什么会有这么多编程语言呢 其实很多语言都是 在特定时期,在特定领域,为了解决特定问题而出现的 随着语言的">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://leriou.github.io/2016-06-08-idea-programing-language/20181108-11394.png">
+<meta property="og:updated_time" content="2018-12-23T13:28:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于编程语言的一些看法">
+<meta name="twitter:description" content="编程语言作为一个程序员, 总是在不断的制作工具-&amp;gt;使用工具-&amp;gt;制作工具-&amp;gt;使用工具的循环中 在这个循环中最重要的一个工具, 可能就是编程语言了 编程语言的种类有很多, 目前依然存在的少说也有数千种, 更不用说那些湮没在历史长河中的了, 但是真正出名的不是很多 很多人会疑惑, 为什么会有这么多编程语言呢 其实很多语言都是 在特定时期,在特定领域,为了解决特定问题而出现的 随着语言的">
+<meta name="twitter:image" content="https://leriou.github.io/2016-06-08-idea-programing-language/20181108-11394.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://leriou.github.io/2016-06-08-idea-programing-language/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>关于编程语言的一些看法 | Leriou's Tavern</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Leriou's Tavern</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">试试我新买的钢笔 ^_^</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags<span class="badge">45</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories<span class="badge">10</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives<span class="badge">50</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/404.html" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>Commonweal 404</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://leriou.github.io/2016-06-08-idea-programing-language/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="哎呀是太阳嘛">
+      <meta itemprop="description" content="君子生非异也, 善假于物也">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Leriou's Tavern">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">关于编程语言的一些看法
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2016-06-08 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-08T00:00:00+08:00">2016-06-08</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-12-23 21:28:08" itemprop="dateModified" datetime="2018-12-23T21:28:08+08:00">2018-12-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/思考/" itemprop="url" rel="index"><span itemprop="name">思考</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016-06-08-idea-programing-language/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments: </span> <span class="post-comments-count valine-comment-count" data-xid="/2016-06-08-idea-programing-language/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2016-06-08-idea-programing-language/" class="leancloud_visitors" data-flag-title="关于编程语言的一些看法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="编程语言"><a href="#编程语言" class="headerlink" title="编程语言"></a>编程语言</h1><p>作为一个程序员, 总是在不断的<code>制作工具</code>-&gt;<code>使用工具</code>-&gt;<code>制作工具</code>-&gt;<code>使用工具</code>的循环中</p>
+<p>在这个循环中最重要的一个工具, 可能就是编程语言了</p>
+<p>编程语言的种类有很多, 目前依然存在的少说也有数千种, 更不用说那些湮没在历史长河中的了, 但是真正出名的不是很多</p>
+<p>很多人会疑惑, 为什么会有这么多编程语言呢</p>
+<p>其实很多语言都是 在特定时期,在特定领域,为了解决特定问题而出现的</p>
+<p>随着语言的进化, 一个语言也可能在2-3个领域获得成功, 但是我目前还没有见过一门可以 全领域通吃的编程语言</p>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><p>编程语言是有很强工具特性的东西</p>
+<p>其实很多编程语言都是可以做相同的事情的, 比如: </p>
+<pre><code>python 可以做web应用
+java   可以做web应用
+node   可以做web应用
+go/php 可以做web应用
+</code></pre><p>实际上,c/c++/ruby/lisp/lua 都是可以做web应用的, 这不是能不能的问题, 其实就是成本问题</p>
+<p>同样, python/php/node/go也都可以做GUI应用, GUI应用其实不仅仅<code>java/c/c++</code>可以做</p>
+<p>这样问题就来了, 为什么一门编程语言就能做所有事情, 还会出现那么多编程语言呢</p>
+<p>答案是 <code>成本</code>.</p>
+<p>首先, 编程语言是否流行主要看该语言使用的人数和发展趋势</p>
+<p>在国内按人数来说目前最流行的3门语言应该是 <code>Java</code>,<code>php</code>,<code>JavaScript</code></p>
+<p>不过如果按热门程度的话(使用者增长比例),前几名应该是 Go,Python,Swift等</p>
+<p>其他的还有一些很有特色的编程语言例如 <code>lisp</code>,<code>clojure</code>,<code>rust</code>等</p>
+<h2 id="思维"><a href="#思维" class="headerlink" title="思维"></a>思维</h2><p>编程语言同时也会很深的影响使用者的思维方式, 一个程序员的初学语言会极大的影响这个人的思维方式</p>
+<p>编程语言虽然都是工具,但是又不是简单的纸笔一类的工具</p>
+<p>编程语言会切实的参与到你制作的产品当中,从这个角度看</p>
+<blockquote>
+<p>编程语言更像是一种原材料</p>
+</blockquote>
+<p>同时每一门编程语言基本都蕴含了一套思想体系,无论是<code>c/c++</code>,还是<code>Java</code>/<code>python</code></p>
+<p>很多计算机科学家都建议大家使用设计上来说比较优秀的编程语言来进行使用,这是有道理的</p>
+<p>有的语言偏重工程,有的语言重学术, 有的重开发效率,有的重视执行效率,除去这些表面的特性差别,有的语言提倡干净简单,有的提倡完善强大.</p>
+<p>初学者没必要大纠结这些语言的倾向</p>
+<h2 id="一个现象"><a href="#一个现象" class="headerlink" title="一个现象"></a>一个现象</h2><p>我观察到很多刚学编程的人有一种心理</p>
+<p>老是想学”最好的”编程语言, 这个最好的标准可能是最通用, 性价比最高,最有挑战性等等</p>
+<p>而且还有一部分人有另一种不好的想法:</p>
+<p><strong>看不起使用者人数众多的语言,希望通过标新立异来表明自己是个多么有独立见解,好像这样就能显得自己多有思想一样</strong></p>
+<p>看Java使用者众多就看不起Java, 心里想着你看你就会Java,这玩意大家都会, 你看看我会的scala/lisp/rust, 多高大上啊, 你不会吧</p>
+<p>也就是所谓的要求高逼格</p>
+<p><code>逼格</code>来源于门槛,不应该是仅仅根据使用人数来界定, 门槛高的东西注定懂的人不会多, 用的人少并不会带来<code>逼格</code></p>
+<h3 id="我的看法"><a href="#我的看法" class="headerlink" title="我的看法"></a>我的看法</h3><p>从我个人的角度我觉得如果把编程语言领域比作金庸先生书中的江湖</p>
+<p>c/c++/Java这种就是传统的武林豪门少林/武当这种</p>
+<p>或许在大部分书中这些门派都不是最强的,但一定是不会太差,处于平均水准以上</p>
+<p>虽然’九阴真经’,’北冥神功’这种级别的绝世武功也大多不是出于少林武当</p>
+<p>但是,这种绝世武功不是适合所有人的</p>
+<p>高收益往往伴随着高风险</p>
+<p>所以还是建议大家多看,多学,增广见闻</p>
+<p>见的多了,看得多了,了解的多了,最后根据自己的需要去选择,不要一开始就去选择拒绝</p>
+<blockquote>
+<p>“当你拒绝一个事物,你就失去了向他学习的机会”</p>
+</blockquote>
+<h2 id="编程语言的分类"><a href="#编程语言的分类" class="headerlink" title="编程语言的分类"></a>编程语言的分类</h2><p>大概列举一下常见的编程语言和应用的领域</p>
+<h3 id="主要领域"><a href="#主要领域" class="headerlink" title="主要领域:"></a>主要领域:</h3><p>Web应用: 以网站和浏览器为载体向用户提供服务的应用, 例如: 百度,谷歌等 特点: 使用方便,交互友好,更新迅速</p>
+<p>服务器编程: 提供数据存储和服务的应用, 例如:各种软件平台,操作系统,数据库等服务. 特点: 功能专一,性能要求高,稳定性要求高</p>
+<p>网络和存储: 基于socket的服务,类型比较多, 多以数据交互和通信为主</p>
+<p>嵌入式: 各种嵌入式设备, 属于偏硬件的编程系统</p>
+<p>图形: 基于openGL/dx3d/vulkan等图形技术进行图像绘制和处理的服务</p>
+<p>游戏: 形式比较多,性能要求高</p>
+<p>数据分析: 大数据,AI都属于数据分析的范畴</p>
+<p>移动端: iOS,Android等</p>
+<h3 id="各语言在各领域的分布"><a href="#各语言在各领域的分布" class="headerlink" title="各语言在各领域的分布"></a>各语言在各领域的分布</h3><p>java: 主要服务器编程,大数据处理,安卓移动端,web端</p>
+<p>c: 系统底层编程, 网络编程, 嵌入式设备</p>
+<p>c++: 图形和游戏,系统底层服务,服务器端</p>
+<p>python: 数据分析, web应用,以及很多的小工具或者作为嵌入式的脚本语言在各种系统中出现</p>
+<p>javascript: web应用, 服务器编程, 移动应用</p>
+<p>php: web应用和服务器编程</p>
+<p>go: web应用, 网络编程 ,服务器编程</p>
+<p>swift/object-c: 移动端(iOS), 服务器端</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>我这里大概谈一些我对编程语言的看法</p>
+<p>我在工作中发现有不少的人都有一种倾向就是看不起其他编程语言的使用者</p>
+<p><em>用php的看不起用js的, 用java的看不起用php的, 用c的看不起用java的, 用lisp的看不起其他所有人(^_^)</em></p>
+<p>其实这是不可取的, 编程语言并不是程序的全部, 甚至都不是程序最重要的部分</p>
+<p>每种语言都有不同的适用场景, 不谈业务场景而只说语言好坏都是耍流氓</p>
+<p>我们正确的态度应该是就事论事,而不是因为用的工具不同互相diss</p>
+<h4 id="Finally"><a href="#Finally" class="headerlink" title="Finally"></a>Finally</h4><p>不过我也确实觉得有一些语言确实很有潜力, 但这不是说这些语言多好</p>
+<p>只是说他们可能更适合将来的一段时间的编程环境</p>
+<p>个人认为比较有潜力的语言:<code>Python</code>,<code>Go</code></p>
+<p>但是之前我有一些朋友想学习编程,让我给他们推荐最适合入门的编程语言</p>
+<p>我一般建议按照两个维度给人推荐语言,一个是技能熟练度要求, 一个是语言本身所属的类型</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">建议的熟练度级别/类型</th>
+<th style="text-align:center">编译型语言</th>
+<th style="text-align:center">脚本语言</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">能看懂即可</td>
+<td style="text-align:center">汇编,C,C++</td>
+<td style="text-align:center">PHP</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">最好会用</td>
+<td style="text-align:center">Go</td>
+<td style="text-align:center">Python</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">最好熟悉</td>
+<td style="text-align:center">Java,Go</td>
+<td style="text-align:center">Python,Javascript</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">值得深入研究</td>
+<td style="text-align:center">C++,Java</td>
+<td style="text-align:center">Python,Javascript</td>
+</tr>
+<tr>
+<td style="text-align:center">兴趣爱好者</td>
+<td style="text-align:center">Clojure/Rust</td>
+<td style="text-align:center">Javascript</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>18年11月更新</p>
+<p>最近查看tiobe的编程语言排行榜(如下), 发现了一些趋势</p>
+<p><img src="20181108-11394.png" alt="11月编程语言排行榜"></p>
+<ol>
+<li><p>Python流行程度猛增</p>
+</li>
+<li><p>C / Java / C++  都有比较显著的增长</p>
+</li>
+<li><p>脚本语言大部分普遍下降</p>
+</li>
+</ol>
+<p>结合这段时间各种语言的更新情况, 总结出来这么个趋势</p>
+<h2 id="php-js-等语言都在加入类型特性"><a href="#php-js-等语言都在加入类型特性" class="headerlink" title="php, js 等语言都在加入类型特性"></a>php, js 等语言都在加入类型特性</h2><p>现在的互联网服务体量越来越大, 以前的php和python的快速开发在早期的互联网时代确实很有优势, 但是现在随着互联网服务的逐渐完善, 之前在开发效率方面有优势的语言渐渐地就有点弱势了</p>
+<p>原因有以下几点:</p>
+<ul>
+<li>需求减少</li>
+</ul>
+<p>快速开发主要服务于大量的初创公司和项目原型,随着互联网进程的发展, 会有大量的服务逐渐被废弃掉   </p>
+<p>存活下来的老服务日积月累下来越来越复杂, 之前快速开发产生的弊端越来越明显, 此时大部分都选择了其他静态语言进行重构   </p>
+<p>现在已经过了互联网蓬勃的爆发期, 对快速开发的需求也有一定程度的下降(现在由于小程序的兴起需求又有回升)   </p>
+<ul>
+<li>适用范围的缩小和新型语言的竞争</li>
+</ul>
+<p>前端的工程化现在进度很快, 脚本语言以前的很多优势在前端的快速发展面前变得很鸡肋   </p>
+<p>脚本语言以前最大的优势就是开发跟用户交互的界面部分比较快速,同时还能操作后台的数据库级别的数据, 一个人可以同时做两份工作   </p>
+<p>但是现在随着社会分工的细化,有更专业的前端工程师来做跟用户交互的事情,而且做得更好, 脚本语言做数据处理等后端部分又完全不是传统静态语言的对手, 导致脚本语言现在处境很尴尬</p>
+<p>新型的Go等语言的出现, 做到了开发速度和执行效率之间的平衡, 也抢夺了脚本语言的市场空间</p>
+<p>所以现在的脚本语言都在不断进化, 减少动态特性, 增加稳定性, 提升执行效率, 语言新特性越来越往适合数据处理方面靠拢</p>
+<h2 id="Java等语言和新出的语言都在增加函数式编程的特性"><a href="#Java等语言和新出的语言都在增加函数式编程的特性" class="headerlink" title="Java等语言和新出的语言都在增加函数式编程的特性"></a>Java等语言和新出的语言都在增加函数式编程的特性</h2><p>随着web服务的逐步发展, 终有一天会达到前端和后端彻底分离的地步, 到那个时候就是前后端完全通过数据进行交互, 前端负责与用户的交互和收集数据, 后端负责数据的存储和计算.   </p>
+<p>但是传统的Java/C 等语言在处理数据方面, 其实不如函数式编程的语言方便</p>
+<p>所以Java也是意识到这个趋势, 逐渐加入函数式编程特性</p>
+<p>新型的rust, julia等编程语言也都在重视性能的同时添加了函数式编程的特性   </p>
+<h2 id="底层语言重新崛起"><a href="#底层语言重新崛起" class="headerlink" title="底层语言重新崛起"></a>底层语言重新崛起</h2><p>最近几年 c/c++/rust等系统编程语言渐渐有重新崛起的趋势</p>
+<p>我觉得原因是因为云计算,大数据和机器学习的需要, 因为这几个领域都是对性能要求较高的领域, 之前适合短平快的语言在这种场景下大部分都难以满足现在巨大的数据处理需求</p>
+<p>Python之所以现在还能有大的发展一方面是因为python 语言上手简单, 不断发展</p>
+<p>我觉得最核心的原因还是因为python 作为一个胶水语言可以很方便的作为c /c++ 这种语言之间的桥梁</p>
+<p>用户既能享受python的简单交互的特性, 高性能部分又可以调用底层的c/c++等库来执行, 达到开发和执行效率的平衡</p>
+<h2 id="一些建议"><a href="#一些建议" class="headerlink" title="一些建议"></a>一些建议</h2><p>建议编程初学者最好学习两个语言, 一个编译型一个脚本型</p>
+<p>初学者建议  go/java + python / js 这样的搭配</p>
+<p>我个人大概是这样的学习路线:</p>
+<p>学校时期: C++, Java , PHP, JS, 都是学校时期学的, 当时就懂了个基本概念, 啥都没学会<br>刚工作时: C/C++, JS/node, PHP 早期工作需要<br>工作一段时间:  Python, Go, Java 后来扩展了部分语言希望多看看, 找到自己真正喜欢的语言<br>未来:  Scala, Rust, Clojure   现在希望能多投资Rust, 并且了解一下Clojure     </p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>你可以请我喝茶呦 ^_^</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="哎呀是太阳嘛 WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpeg" alt="哎呀是太阳嘛 Alipay">
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>leriou</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    
+    <a href="https://leriou.github.io/2016-06-08-idea-programing-language/" title="关于编程语言的一些看法">https://leriou.github.io/2016-06-08-idea-programing-language/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程语言/" rel="tag"># 编程语言</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+               <div id="needsharebutton-postbottom">
+                 <span class="btn">
+                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                 </span>
+               </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016-06-07-pili-music/" rel="next" title="音乐推荐--霹雳音乐集锦">
+                <i class="fa fa-chevron-left"></i> 音乐推荐--霹雳音乐集锦
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016-07-07-poem-jianyingfogu/" rel="prev" title="谏迎佛骨表--韩愈">
+                谏迎佛骨表--韩愈 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="哎呀是太阳嘛">
+            
+              <p class="site-author-name" itemprop="name">哎呀是太阳嘛</p>
+              <p class="site-description motion-element" itemprop="description">君子生非异也, 善假于物也</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/leriou" title="GitHub &rarr; https://github.com/leriou" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://plus.google.com/yange1876" title="Google &rarr; https://plus.google.com/yange1876" rel="noopener" target="_blank"><i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/yange1876" title="Twitter &rarr; https://twitter.com/yange1876" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/1985364641" title="Weibo &rarr; https://weibo.com/1985364641" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#编程语言"><span class="nav-number">1.</span> <span class="nav-text">编程语言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工具"><span class="nav-number">1.1.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思维"><span class="nav-number">1.2.</span> <span class="nav-text">思维</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个现象"><span class="nav-number">1.3.</span> <span class="nav-text">一个现象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#我的看法"><span class="nav-number">1.3.1.</span> <span class="nav-text">我的看法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编程语言的分类"><span class="nav-number">1.4.</span> <span class="nav-text">编程语言的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要领域"><span class="nav-number">1.4.1.</span> <span class="nav-text">主要领域:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#各语言在各领域的分布"><span class="nav-number">1.4.2.</span> <span class="nav-text">各语言在各领域的分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">1.4.3.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Finally"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">Finally</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#php-js-等语言都在加入类型特性"><span class="nav-number">1.5.</span> <span class="nav-text">php, js 等语言都在加入类型特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java等语言和新出的语言都在增加函数式编程的特性"><span class="nav-number">1.6.</span> <span class="nav-text">Java等语言和新出的语言都在增加函数式编程的特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#底层语言重新崛起"><span class="nav-number">1.7.</span> <span class="nav-text">底层语言重新崛起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些建议"><span class="nav-number">1.8.</span> <span class="nav-text">一些建议</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wifi"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">connect to Leriou</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  <script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  <script>
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+      el: '#comments' ,
+      verify: false,
+      notify: false,
+      appId: 'd3Ferur4FUri7vERAylGpome-gzGzoHsz',
+      appKey: 'uRGeMnmfAq6h88QavSUfpS3q',
+      placeholder: '你不想说点什么吗 ???',
+      avatar: 'retro',
+      meta:guest,
+      pageSize: '10' || 10,
+      visitor: true
+    });
+  </script>
+
+
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "default";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "middle + left";
+      
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="/js/src/js.cookie.js?v=6.6.0"></script>
+  <script src="/js/src/scroll-cookie.js?v=6.6.0"></script>
+
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('Copy').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function () {
+          $b.text('Copy');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

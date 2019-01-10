@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"perspectiveLeftIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"perspectiveRightIn","sidebar":"perspectiveRightIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="什么是光线追踪光线追踪是计算机图形领域实现全局光照效果的一种手段 光线追踪由于实现简单,效果优秀,但是效率比较低 所以一直以来大多作为学习之用">
+<meta name="keywords" content="raytracing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个简单的用JS实现的光线追踪效果">
+<meta property="og:url" content="https://leriou.github.io/2016-09-27-simple-raytracing/index.html">
+<meta property="og:site_name" content="Leriou&#39;s Tavern">
+<meta property="og:description" content="什么是光线追踪光线追踪是计算机图形领域实现全局光照效果的一种手段 光线追踪由于实现简单,效果优秀,但是效率比较低 所以一直以来大多作为学习之用">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://leriou.github.io/2016-09-27-simple-raytracing/2010032819542028.png">
+<meta property="og:updated_time" content="2018-12-22T08:41:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一个简单的用JS实现的光线追踪效果">
+<meta name="twitter:description" content="什么是光线追踪光线追踪是计算机图形领域实现全局光照效果的一种手段 光线追踪由于实现简单,效果优秀,但是效率比较低 所以一直以来大多作为学习之用">
+<meta name="twitter:image" content="https://leriou.github.io/2016-09-27-simple-raytracing/2010032819542028.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://leriou.github.io/2016-09-27-simple-raytracing/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>一个简单的用JS实现的光线追踪效果 | Leriou's Tavern</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Leriou's Tavern</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">试试我新买的钢笔 ^_^</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags<span class="badge">45</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories<span class="badge">10</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives<span class="badge">50</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/404.html" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>Commonweal 404</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://leriou.github.io/2016-09-27-simple-raytracing/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="哎呀是太阳嘛">
+      <meta itemprop="description" content="君子生非异也, 善假于物也">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Leriou's Tavern">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">一个简单的用JS实现的光线追踪效果
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2015-09-27 18:51:00" itemprop="dateCreated datePublished" datetime="2015-09-27T18:51:00+08:00">2015-09-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-12-22 16:41:18" itemprop="dateModified" datetime="2018-12-22T16:41:18+08:00">2018-12-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/编程学习/" itemprop="url" rel="index"><span itemprop="name">编程学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016-09-27-simple-raytracing/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments: </span> <span class="post-comments-count valine-comment-count" data-xid="/2016-09-27-simple-raytracing/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2016-09-27-simple-raytracing/" class="leancloud_visitors" data-flag-title="一个简单的用JS实现的光线追踪效果">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是光线追踪"><a href="#什么是光线追踪" class="headerlink" title="什么是光线追踪"></a>什么是光线追踪</h1><p>光线追踪是计算机图形领域实现全局光照效果的一种手段</p>
+<p>光线追踪由于实现简单,效果优秀,但是效率比较低</p>
+<p>所以一直以来大多作为学习之用</p>
+<a id="more"></a>
+<h1 id="一个简单的光线追踪的例子"><a href="#一个简单的光线追踪的例子" class="headerlink" title="一个简单的光线追踪的例子"></a>一个简单的光线追踪的例子</h1><p>点击下方的按钮就可以渲染出一张图片哦,纯渲染出的哦(渲染很消耗性能可能会有少许的等待时间)</p>
+<h2 id="在线测试"><a href="#在线测试" class="headerlink" title="在线测试"></a>在线测试</h2><p>视角坐标:</p>
+<p>X:<input type="number" min="-100" max="100" step="5" value="0" id="pos_x">&nbsp;&nbsp;Y:<input type="number" min="-100" max="100" step="5" value="5" id="pos_y">&nbsp;&nbsp;Z:<input type="number" min="-100" max="100" step="5" value="15" id="pos_z">&nbsp;&nbsp;反射次数:&nbsp;&nbsp;<input type="number" min="0" max="30" step="1" value="5" id="reflect_times">&nbsp;&nbsp;<button onclick="javascript:render_pic();" class="btn btn-info">RENDER</button></p>
+<div style="text-align: center;"><br>    <canvas id="renderCanvas" width="512" height="512" style="display:none"></canvas><br></div>
+
+<h2 id="代码解释"><a href="#代码解释" class="headerlink" title="代码解释"></a>代码解释</h2><p>查看本页的源代码可以查找到源代码</p>
+<p>核心的代码就是如下几行</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas'</span>); <span class="comment">// 获取画布对象</span></span><br><span class="line">canvas.style.display = <span class="string">"block"</span>;</span><br><span class="line"><span class="keyword">var</span> plane = <span class="keyword">new</span> Plane(<span class="keyword">new</span> Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), <span class="number">0</span>);   <span class="comment">// 基本平面 该平面的法向量为(0,1,0)</span></span><br><span class="line"><span class="keyword">var</span> sphere1 = <span class="keyword">new</span> Sphere(<span class="keyword">new</span> Vector3(<span class="number">-10</span>, <span class="number">10</span>, <span class="number">-10</span>), <span class="number">10</span>); <span class="comment">//球1 位置(-10,10,-10),半径 10</span></span><br><span class="line"><span class="keyword">var</span> sphere2 = <span class="keyword">new</span> Sphere(<span class="keyword">new</span> Vector3(<span class="number">10</span>, <span class="number">10</span>, <span class="number">-10</span>), <span class="number">10</span>);  <span class="comment">//球2 位置(10,10,-10),半径 10</span></span><br><span class="line">plane.material = <span class="keyword">new</span> CheckerMaterial(<span class="number">0.1</span>, <span class="number">0.5</span>);  <span class="comment">// 国际象棋棋盘材质</span></span><br><span class="line">sphere1.material = <span class="keyword">new</span> PhongMaterial(Color.red, Color.white, <span class="number">20</span>, <span class="number">0.25</span>); <span class="comment">//球1 Phong材质</span></span><br><span class="line">sphere2.material = <span class="keyword">new</span> PhongMaterial(Color.blue, Color.white, <span class="number">20</span>, <span class="number">0.25</span>);<span class="comment">//球2 Phong材质</span></span><br><span class="line">rayTraceReflection(</span><br><span class="line">    canvas,</span><br><span class="line">    <span class="keyword">new</span> Union([plane, sphere1, sphere2]),</span><br><span class="line">    <span class="keyword">new</span> PerspectiveCamera(<span class="keyword">new</span> Vector3(<span class="number">0</span>, <span class="number">5</span>, <span class="number">15</span>), <span class="keyword">new</span> Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">-1</span>), <span class="keyword">new</span> Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), <span class="number">90</span>),</span><br><span class="line">    <span class="number">5</span>);<span class="comment">// 渲染参数,视角位置(0,5,15),视角90度,反射5次</span></span><br></pre></td></tr></table></figure>
+<h2 id="光线追踪"><a href="#光线追踪" class="headerlink" title="光线追踪"></a>光线追踪</h2><p>本文的例子实际上是一种光线追踪(ray tracing)的实现.<br>光线追踪是全局光照(Global Illumination)的其中一中实现方式,该方法原理和实现方法都很简单但需要的计算量比较大,普通游戏无法使用,多用于学习研究性质或离线渲染(offline rendering),游戏中大多用其他技术手段实现类似效果</p>
+<p>优点:</p>
+<ol>
+<li>效果逼真,实现简单</li>
+<li>自带消隐(消除隐藏面)功能</li>
+<li>有阴影效果</li>
+<li>可以并行</li>
+<li>隐含透视性质</li>
+</ol>
+<p>缺点:</p>
+<ol>
+<li>光线追踪只能模拟光线的镜面反射(specular)行为,无法很好地模拟漫反射(diffuse)</li>
+<li>容易出现图形走样现象,因为透过两个相邻像素的光线到物体表面的距离会被放大,两像素之间的细节无法表现</li>
+</ol>
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>光线追踪的基本原理比较简单,如下图</p>
+<p><img src="2010032819542028.png" alt="原理图"></p>
+<blockquote>
+<p>从人眼的位置往屏幕上的每个像素发射光线,如果遇到具有反射性质的表面,继续追踪反射光线,最终根据光线返回的颜色去给像素进行着色</p>
+</blockquote>
+<p>因而可以比较简单的表现,反射,阴影折射等效果,但缺点是计算量较大<br>现在也有很多其他方式可以实现全局光照的效果(例如:辐射度算法,光子映射,甚至采用光照贴图模拟)</p>
+<p>这里的光线返回的颜色既是改像素点计算得到的颜色,具体计算方法是根据光线在多个物体表面的反射得到</p>
+<h2 id="渲染深度"><a href="#渲染深度" class="headerlink" title="渲染深度"></a>渲染深度</h2><p>渲染深度通俗的讲就是根据某一点距离摄像机的距离渲染出不同的颜色,越远的点颜色越暗,近的点略亮</p>
+<p>通过计算模拟眼睛与第一个看到的画面上的点的距离,映射到0-255的区间,进行色彩数值的处理</p>
+<h2 id="材质"><a href="#材质" class="headerlink" title="材质"></a>材质</h2><p>材质是渲染物体所必不可少的一项要素,材质根据自身的光学特性和物理特性决定了光线照射到物体表面某一点所呈现的颜色</p>
+<p>Phong光照模型是一种基本的光照模型,可以较为真实的模拟物体表面的某些特性</p>
+<blockquote>
+<p>环境光 + 漫反射 + 镜面反射  = Phong反射</p>
+</blockquote>
+<p>实现材质效果需要一定的特征函数配合</p>
+<p>材质往往和纹理一起配合出现</p>
+<h2 id="色彩"><a href="#色彩" class="headerlink" title="色彩"></a>色彩</h2><p>色彩本身是个极其庞大的学科,本文用到的色彩只是比较简单</p>
+<p>仅仅使用增色系统的三原色(RGB)来做一些基本的颜色模拟</p>
+<p>使用简单的三元数(R,G,B)来表示颜色的基本信息</p>
+<script>
+
+Vector3 = function(x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+};
+Vector3.prototype = {
+    copy: function() {
+        return new Vector3(this.x, this.y, this.z);
+    },
+    length: function() {
+        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    },
+    sqrLength: function() {
+        return this.x * this.x + this.y * this.y + this.z * this.z;
+    },
+    normalize: function() {
+        var inv = 1 / this.length();
+        return new Vector3(this.x * inv, this.y * inv, this.z * inv);
+    },
+    negate: function() {
+        return new Vector3(-this.x, -this.y, -this.z);
+    },
+    add: function(v) {
+        return new Vector3(this.x + v.x, this.y + v.y, this.z + v.z);
+    },
+    subtract: function(v) {
+        return new Vector3(this.x - v.x, this.y - v.y, this.z - v.z);
+    },
+    multiply: function(f) {
+        return new Vector3(this.x * f, this.y * f, this.z * f);
+    },
+    divide: function(f) {
+        var invf = 1 / f;
+        return new Vector3(this.x * invf, this.y * invf, this.z * invf);
+    },
+    dot: function(v) {
+        return this.x * v.x + this.y * v.y + this.z * v.z;
+    },
+    cross: function(v) {
+        return new Vector3(-this.z * v.y + this.y * v.z, this.z * v.x - this.x * v.z, -this.y * v.x + this.x * v.y);
+    }
+};
+
+Vector3.zero = new Vector3(0, 0, 0);
+Color = function(r, g, b) {
+    this.r = r;
+    this.g = g;
+    this.b = b
+};
+Color.prototype = {
+    copy: function() {
+        return new Color(this.r, this.g, this.b);
+    },
+    add: function(c) {
+        return new Color(this.r + c.r, this.g + c.g, this.b + c.b);
+    },
+    multiply: function(s) {
+        return new Color(this.r * s, this.g * s, this.b * s);
+    },
+    modulate: function(c) {
+        return new Color(this.r * c.r, this.g * c.g, this.b * c.b);
+    },
+    saturate: function() {
+        this.r = Math.min(this.r, 1);
+        this.g = Math.min(this.g, 1);
+        this.b = Math.min(this.b, 1);
+    }
+};
+
+Color.black = new Color(0, 0, 0);
+Color.white = new Color(1, 1, 1);
+Color.red = new Color(1, 0, 0);
+Color.green = new Color(0, 1, 0);
+Color.blue = new Color(0, 0, 1);
+
+
+PhongMaterial = function(diffuse, specular, shininess, reflectiveness) {
+    this.diffuse = diffuse;
+    this.specular = specular;
+    this.shininess = shininess;
+    this.reflectiveness = reflectiveness;
+};
+PhongMaterial.prototype = {
+    sample: function(ray, position, normal) {
+        var NdotL = normal.dot(lightDir);
+        var H = (lightDir.subtract(ray.direction)).normalize();
+        var NdotH = normal.dot(H);
+        var diffuseTerm = this.diffuse.multiply(Math.max(NdotL, 0));
+        var specularTerm = this.specular.multiply(Math.pow(Math.max(NdotH, 0), this.shininess));
+        return lightColor.modulate(diffuseTerm.add(specularTerm));
+    }
+};
+
+PerspectiveCamera = function(eye, front, up, fov) {
+    this.eye = eye;
+    this.front = front;
+    this.refUp = up;
+    this.fov = fov;
+};
+PerspectiveCamera.prototype = {
+    initialize: function() {
+        this.right = this.front.cross(this.refUp);
+        this.up = this.right.cross(this.front);
+        this.fovScale = Math.tan(this.fov * 0.5 * Math.PI / 180) * 2;
+    },
+    generateRay: function(x, y) {
+        var r = this.right.multiply((x - 0.5) * this.fovScale);
+        var u = this.up.multiply((y - 0.5) * this.fovScale);
+        return new Ray3(this.eye, this.front.add(r).add(u).normalize());
+    }
+};
+
+Plane = function(normal, d) {
+    this.normal = normal;
+    this.d = d;
+};
+Plane.prototype = {
+    copy: function() {
+        return new plane(this.normal.copy(), this.d);
+    },
+    initialize: function() {
+        this.position = this.normal.multiply(this.d);
+    },
+    intersect: function(ray) {
+        var a = ray.direction.dot(this.normal);
+        if (a >= 0) {
+            return IntersectResult.noHit;
+        }
+        var b = this.normal.dot(ray.origin.subtract(this.position));
+        var result = new IntersectResult();
+        result.geometry = this;
+        result.distance = -b / a;
+        result.position = ray.getPoint(result.distance);
+        result.normal = this.normal;
+        return result;
+    }
+};
+
+Sphere = function(center, radius) {
+    this.center = center;
+    this.radius = radius;
+};
+Sphere.prototype = {
+    copy: function() {
+        return new Sphere(this.center.copy(), this.radius.copy());
+    },
+    initialize: function() { this.sqrRadius = this.radius * this.radius; },
+    intersect: function(ray) {
+        var v = ray.origin.subtract(this.center);
+        var a0 = v.sqrLength() - this.sqrRadius;
+        var DdotV = ray.direction.dot(v);
+        if (DdotV <= 0) {
+            var discr = DdotV * DdotV - a0;
+            if (discr >= 0) {
+                var result = new IntersectResult();
+                result.geometry = this;
+                result.distance = -DdotV - Math.sqrt(discr);
+                result.position = ray.getPoint(result.distance);
+                result.normal = result.position.subtract(this.center).normalize();
+                return result;
+            }
+        }
+        return IntersectResult.noHit;
+    }
+};
+
+IntersectResult = function() {
+    this.geometry = null;
+    this.distance = 0;
+    this.position = Vector3.zero;
+    this.normal = Vector3.zero;
+};
+IntersectResult.noHit = new IntersectResult();
+
+
+Union = function(geometries) { this.geometries = geometries; };
+Union.prototype = {
+    initialize: function() {
+        for (var i in this.geometries)
+            this.geometries[i].initialize();
+    },
+    intersect: function(ray) {
+        var minDistance = Infinity;
+        var minResult = IntersectResult.noHit;
+        for (var i in this.geometries) {
+            var result = this.geometries[i].intersect(ray);
+            if (result.geometry && result.distance < minDistance) {
+                minDistance = result.distance;
+                minResult = result;
+            }
+        }
+        return minResult;
+    }
+};
+
+Ray3 = function(origin, direction) {
+    this.origin = origin;
+    this.direction = direction;
+}
+Ray3.prototype = {
+    getPoint: function(t) {
+        return this.origin.add(this.direction.multiply(t));
+    }
+};
+
+var lightDir = new Vector3(1, 1, 1).normalize();
+var lightColor = Color.white;
+
+CheckerMaterial = function(scale, reflectiveness) {
+    this.scale = scale;
+    this.reflectiveness = reflectiveness;
+};
+
+CheckerMaterial.prototype = {
+    sample: function(ray, position, normal) {
+        return Math.abs((Math.floor(position.x * 0.1) + Math.floor(position.z * this.scale)) % 2) < 1 ? Color.black : Color.white;
+    }
+};
+
+function rayTraceRecursive(scene, ray, maxReflect) {
+    var result = scene.intersect(ray);
+
+    if (result.geometry) {
+        var reflectiveness = result.geometry.material.reflectiveness;
+        var color = result.geometry.material.sample(ray, result.position, result.normal);
+        color = color.multiply(1 - reflectiveness);
+
+        if (reflectiveness > 0 && maxReflect > 0) {
+            var r = result.normal.multiply(-2 * result.normal.dot(ray.direction)).add(ray.direction);
+            ray = new Ray3(result.position, r);
+            var reflectedColor = rayTraceRecursive(scene, ray, maxReflect - 1);
+            color = color.add(reflectedColor.multiply(reflectiveness));
+        }
+        return color;
+    } else
+        return Color.black;
+}
+
+function rayTraceReflection(canvas, scene, camera, maxReflect) {
+    if (!canvas || !canvas.getContext)
+        return;
+
+    var ctx = canvas.getContext("2d");
+    if (!ctx.getImageData)
+        return;
+
+    var w = canvas.attributes.width.value;
+    var h = canvas.attributes.height.value;
+    ctx.fillStyle = "rgb(0,0,0)";
+    ctx.fillRect(0, 0, w, h);
+
+    var imgdata = ctx.getImageData(0, 0, w, h);
+    var pixels = imgdata.data;
+
+    scene.initialize();
+    camera.initialize();
+
+    var i = 0;
+    for (var y = 0; y < h; y++) {
+        var sy = 1 - y / h;
+        for (var x = 0; x < w; x++) {
+            var sx = x / w;
+            var ray = camera.generateRay(sx, sy);
+            var color = rayTraceRecursive(scene, ray, maxReflect);
+            pixels[i++] = color.r * 255;
+            pixels[i++] = color.g * 255;
+            pixels[i++] = color.b * 255;
+            pixels[i++] = 255;
+        }
+    }
+    ctx.putImageData(imgdata, 0, 0);
+}
+
+function render_pic(){
+    var canvas = document.getElementById('renderCanvas');
+    canvas.style.display = "block";
+    var plane = new Plane(new Vector3(0, 1, 0), 0);
+    var sphere1 = new Sphere(new Vector3(-10, 10, -10), 10);
+    var sphere2 = new Sphere(new Vector3(10, 10, -10), 10);
+    plane.material = new CheckerMaterial(0.1, 0.5);
+    sphere1.material = new PhongMaterial(Color.red, Color.white, 20, 0.25);
+    sphere2.material = new PhongMaterial(Color.blue, Color.white, 20, 0.25);
+
+    var zx,zy,zz,reflect_times,camera;
+    zx = parseInt(document.getElementById('pos_x').value,10);
+    zy = parseInt(document.getElementById('pos_y').value,10);
+    zz = parseInt(document.getElementById('pos_z').value,10);
+    reflect_times = parseInt(document.getElementById('reflect_times').value,10);
+
+    console.log([zz,zy,zx]);
+
+    camera =  new PerspectiveCamera(new Vector3(zx, zy, zz), new Vector3(0, 0, -1), new Vector3(0, 1, 0), 90);
+
+    rayTraceReflection(
+    canvas,
+    new Union([plane, sphere1, sphere2]),
+    camera,
+    reflect_times);
+}
+
+</script>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>你可以请我喝茶呦 ^_^</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="哎呀是太阳嘛 WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpeg" alt="哎呀是太阳嘛 Alipay">
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>哎呀是太阳嘛</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    
+    <a href="https://leriou.github.io/2016-09-27-simple-raytracing/" title="一个简单的用JS实现的光线追踪效果">https://leriou.github.io/2016-09-27-simple-raytracing/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/raytracing/" rel="tag"># raytracing</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+               <div id="needsharebutton-postbottom">
+                 <span class="btn">
+                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                 </span>
+               </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015-09-18-do-not-afraid/" rel="next" title="别害怕">
+                <i class="fa fa-chevron-left"></i> 别害怕
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015-09-28-smallpt/" rel="prev" title="学习Smallpt全局光照引擎">
+                学习Smallpt全局光照引擎 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="哎呀是太阳嘛">
+            
+              <p class="site-author-name" itemprop="name">哎呀是太阳嘛</p>
+              <p class="site-description motion-element" itemprop="description">君子生非异也, 善假于物也</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/leriou" title="GitHub &rarr; https://github.com/leriou" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://plus.google.com/yange1876" title="Google &rarr; https://plus.google.com/yange1876" rel="noopener" target="_blank"><i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/yange1876" title="Twitter &rarr; https://twitter.com/yange1876" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/1985364641" title="Weibo &rarr; https://weibo.com/1985364641" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是光线追踪"><span class="nav-number">1.</span> <span class="nav-text">什么是光线追踪</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一个简单的光线追踪的例子"><span class="nav-number">2.</span> <span class="nav-text">一个简单的光线追踪的例子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#在线测试"><span class="nav-number">2.1.</span> <span class="nav-text">在线测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码解释"><span class="nav-number">2.2.</span> <span class="nav-text">代码解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#光线追踪"><span class="nav-number">2.3.</span> <span class="nav-text">光线追踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本原理"><span class="nav-number">2.4.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染深度"><span class="nav-number">2.5.</span> <span class="nav-text">渲染深度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#材质"><span class="nav-number">2.6.</span> <span class="nav-text">材质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#色彩"><span class="nav-number">2.7.</span> <span class="nav-text">色彩</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wifi"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">connect to Leriou</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  <script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  <script>
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+      el: '#comments' ,
+      verify: false,
+      notify: false,
+      appId: 'd3Ferur4FUri7vERAylGpome-gzGzoHsz',
+      appKey: 'uRGeMnmfAq6h88QavSUfpS3q',
+      placeholder: '你不想说点什么吗 ???',
+      avatar: 'retro',
+      meta:guest,
+      pageSize: '10' || 10,
+      visitor: true
+    });
+  </script>
+
+
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "default";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "middle + left";
+      
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="/js/src/js.cookie.js?v=6.6.0"></script>
+  <script src="/js/src/scroll-cookie.js?v=6.6.0"></script>
+
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('Copy').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function () {
+          $b.text('Copy');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

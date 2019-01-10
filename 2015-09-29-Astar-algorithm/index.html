@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"perspectiveLeftIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"perspectiveRightIn","sidebar":"perspectiveRightIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="A*寻路背景介绍我们日常生活中的很多决策问题都可以转化为对应的路径规划问题,如何从复杂的路径中寻找两个或者多个点之间的最短距离就是一个很值得研究的东西 A*算法是一种寻路算法,解决的是路径规划问题的一种 目的是:  找出某地图中两点之间的最短路径  寻路过程先来看个地图 s:起点   e:终点  #:障碍 | | | | | | | |           | | | |#| | | | | |s">
+<meta name="keywords" content="A*算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习A*寻路算法">
+<meta property="og:url" content="https://leriou.github.io/2015-09-29-Astar-algorithm/index.html">
+<meta property="og:site_name" content="Leriou&#39;s Tavern">
+<meta property="og:description" content="A*寻路背景介绍我们日常生活中的很多决策问题都可以转化为对应的路径规划问题,如何从复杂的路径中寻找两个或者多个点之间的最短距离就是一个很值得研究的东西 A*算法是一种寻路算法,解决的是路径规划问题的一种 目的是:  找出某地图中两点之间的最短路径  寻路过程先来看个地图 s:起点   e:终点  #:障碍 | | | | | | | |           | | | |#| | | | | |s">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-12-22T08:23:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学习A*寻路算法">
+<meta name="twitter:description" content="A*寻路背景介绍我们日常生活中的很多决策问题都可以转化为对应的路径规划问题,如何从复杂的路径中寻找两个或者多个点之间的最短距离就是一个很值得研究的东西 A*算法是一种寻路算法,解决的是路径规划问题的一种 目的是:  找出某地图中两点之间的最短路径  寻路过程先来看个地图 s:起点   e:终点  #:障碍 | | | | | | | |           | | | |#| | | | | |s">
+
+
+
+
+
+
+  <link rel="canonical" href="https://leriou.github.io/2015-09-29-Astar-algorithm/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>学习A*寻路算法 | Leriou's Tavern</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Leriou's Tavern</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">试试我新买的钢笔 ^_^</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags<span class="badge">45</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories<span class="badge">10</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives<span class="badge">50</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/404.html" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>Commonweal 404</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://leriou.github.io/2015-09-29-Astar-algorithm/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="哎呀是太阳嘛">
+      <meta itemprop="description" content="君子生非异也, 善假于物也">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Leriou's Tavern">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">学习A*寻路算法
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2015-09-29 18:51:59" itemprop="dateCreated datePublished" datetime="2015-09-29T18:51:59+08:00">2015-09-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-12-22 16:23:22" itemprop="dateModified" datetime="2018-12-22T16:23:22+08:00">2018-12-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/编程学习/" itemprop="url" rel="index"><span itemprop="name">编程学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015-09-29-Astar-algorithm/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments: </span> <span class="post-comments-count valine-comment-count" data-xid="/2015-09-29-Astar-algorithm/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2015-09-29-Astar-algorithm/" class="leancloud_visitors" data-flag-title="学习A*寻路算法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="A-寻路"><a href="#A-寻路" class="headerlink" title="A*寻路"></a><code>A*</code>寻路</h1><h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>我们日常生活中的很多决策问题都可以转化为对应的路径规划问题,如何从复杂的路径中寻找两个或者多个点之间的最短距离就是一个很值得研究的东西</p>
+<p><code>A*</code>算法是一种寻路算法,解决的是路径规划问题的一种</p>
+<p>目的是:</p>
+<blockquote>
+<p>找出某地图中两点之间的最短路径</p>
+</blockquote>
+<h2 id="寻路过程"><a href="#寻路过程" class="headerlink" title="寻路过程"></a>寻路过程</h2><p>先来看个地图</p>
+<pre><code>s:起点   e:终点  #:障碍
+| | | | | | | |          
+| | | |#| | | |
+| |s| |#| |e| |
+| | | |#| | | |
+| | | | | | | |
+</code></pre><p>现在有这样的需求,我们需要找出s-&gt;e的最短路径<br>但是,s和e之间有一堵’墙’,就是”#”啦<br>这样怎么才能找出最短路径呢?  </p>
+<p>第一种做法(Dijkstra算法):</p>
+<pre><code>s:起点   e:终点  *:检索路径 #:障碍
+|*|*|*| | | | |
+|*|*|*|#| | | |
+|*|s|*|#| |e| |
+|*|*|*|#|*|*| |
+|*|*|*|*|*| | |
+</code></pre><p>或者我们可以这样做(A*):</p>
+<pre><code>s:起点   e:终点 *:检索路径 #:障碍
+| | | | | | | |       
+|*|*|*|#| | | |
+|*|s|*|#| |e| |
+|*|*|*|#|*| | |
+| | |*|*|*| | |
+</code></pre><p>很明显,第二种做法比第一种做法检索的路径要少很多,当然,速度上就要快一些,对一些更复杂的地图,<code>A*</code>要比普通广度优先的算法快上许多</p>
+<p>例如:</p>
+<pre><code>s:起点  e:终点  *:检索路径  #:障碍
+| | | | | | | | | | | | | |    
+| | | | | | | | |e| | | | |    
+| | | |#|#|#|#|#|#|#| | | |    
+| | |#| | | | | | | |#| | |    
+| | |#| | | | | | | |#| | |    
+| | |#| | | | | | | |#| | |    
+| | |#| | | | | | | |#| | |    
+| | | | | | | | | | | | | |
+| | | | | | |s| | | | | | |
+| | | | | | | | | | | | | |
+| | | | | | | | | | | | | |
+</code></pre><p>这个地图中从s到e,如果使用普通寻路可能是这样的</p>
+<pre><code>s:起点  e:终点  *:最终路径  #:障碍
+| | | | | | | | | | | | | |    
+| | | | | | | | |e|*|*| | |    
+| | | |#|#|#|#|#|#|#|*|*| |    
+| | |#| | | |*|*|*|*|#|*| |    
+| | |#| | | |*| | |*|#|*| |    
+| | |#| | | |*| | |*|#|*| |    
+| | |#| | | |*| | |*|#|*| |    
+| | | | | | |*| | | |*|*| |
+| | | | | | |s| | | | | | |
+| | | | | | | | | | | | | |
+| | | | | | | | | | | | | |
+</code></pre><p>很明显,寻路过程中出现了较多的无用步数,寻路进入了布袋口里面,我们期望的是寻路尽量快速,寻找最短路径,<code>A*</code>的做法就比较符合我们的期望</p>
+<p><code>A*</code>寻路:</p>
+<pre><code>s:起点  e:终点  *:最终路径 #:障碍
+| | | | | | | | | | | | | |    
+| | | | | | | | |e|*|*| | |    
+| | | |#|#|#|#|#|#|#|*|*| |    
+| | |#| | | | | | | |#|*| |    
+| | |#| | | | | | | |#|*| |    
+| | |#| | | | | | | |#|*| |    
+| | |#| | | | | | | |#|*| |    
+| | | | | | |*|*|*|*|*|*| |
+| | | | | | |s| | | | | | |
+| | | | | | | | | | | | | |
+| | | | | | | | | | | | | |
+</code></pre><h2 id="A-寻路的主要过程"><a href="#A-寻路的主要过程" class="headerlink" title="A*寻路的主要过程"></a><code>A*</code>寻路的主要过程</h2><ol>
+<li>将起点S加入到开放列表(开放列表中的点都是可用的)</li>
+<li>寻找起点S周围所有可到达的点,并计算F值(最终衡量陆静距离的值),设置这些点的父节点为起点,将这些点加入到一个开放列表</li>
+<li>将起点从开放列表中删除,并添加到关闭列表,从开放列表中选取F值最小的点M(如果有多个最小F值,随机取其一)</li>
+<li>将M从开放列表中删除,并添加到关闭列表,计算M周围可到达的点,重新计算F值,将周围这些点都存入开放列表,设置他们的父节点为M</li>
+<li>如果M周围某个点已经在开放列表中,重新计算F值和G值(已消耗路径),选取新旧G值中最小的点</li>
+<li>最后如果发现终点在开放列表中,终止程序</li>
+</ol>
+<p><strong><code>A*</code>寻路的精髓</strong></p>
+<blockquote>
+<p>F = G + H</p>
+</blockquote>
+<p>F:用来评价点距起点距离的值</p>
+<p>G:实际已耗费的路径</p>
+<p>H:未来还需要耗费的路径</p>
+<p><code>A*</code>算法的实质是通过维护一个<code>待检测点的列表(open list)</code>和一个<code>已检测点的列表(closed list)</code>来记录寻路过程,从图形上来看，OPEN集是已访问区域的边界，CLOSED集是已访问区域的内部。每个节点还包含一个指向父节点的指针，以确定追踪关系。</p>
+<p>算法有一个主循环,重复地从OPEN集中取最优节点n(即f值最小的节点)来检测.如果n是目标节点,那么算法结束;否则,将节点n从OPEN集删除,并添加到CLOSED集中,然后查看n的所有邻节点n’,如果邻节点在CLOSED集,它已被检测过,则无需再检测(<em>);如果邻节点在OPEN集,它将会被检测,则无需此时检测(</em>);否则,将该邻节点加入OPEN集,设置其父节点为n,到n’的路径开销F(n’) = G(n) + H(n,n’)</p>
+<h2 id="A-的变种"><a href="#A-的变种" class="headerlink" title="A*的变种"></a><code>A*</code>的变种</h2><p><code>A*</code>算法可以通过<code>动态加权</code>,<code>跳跃点搜索</code>,<code>双向搜索</code>,<code>迭代深化</code>等进行性能和功能的优化</p>
+<p>此外还有<code>动态A*</code>与<code>终身规划A*</code>等变化,这些变化其实都是基于基本的<code>A*</code>理论来进行优化</p>
+<h2 id="寻路算法的应用"><a href="#寻路算法的应用" class="headerlink" title="寻路算法的应用"></a>寻路算法的应用</h2><p>比较常见的是寻路算法在游戏中的应用,因为很多游戏中会有地图的概念,涉及到地图就很容易有寻路规划的需要</p>
+<p>比如:许多RPG游戏中会有去寻找某个NPC接任务或者去某个地方打败某个BOSS</p>
+<p>寻路算法在生活中也有应用,比如 探索和侦查,道路建设,地形分析,城市规划等</p>
+<p>总之,深入研究寻路算法是非常有意义的</p>
+<h2 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h2><p>如果有希望深入了解<code>A*</code>的读者,强烈推荐一篇文章,作者写的非常用心,讲的也特别细</p>
+<p>地址:<a href="http://theory.stanford.edu/~amitp/GameProgramming/index.html" target="_blank" rel="noopener">http://theory.stanford.edu/~amitp/GameProgramming/index.html</a></p>
+<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><p>下面是一个Python实现的<code>A*寻路</code>的代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node_Elem</span>:</span></span><br><span class="line">    <span class="comment">#开放列表和关闭列表的元素类型，parent用来在成功的时候回溯路径</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, parent, x, y, dist)</span>:</span></span><br><span class="line">        self.parent = parent</span><br><span class="line">        self.x = x</span><br><span class="line">        self.y = y</span><br><span class="line">        self.dist = dist</span><br></pre></td></tr></table></figure>
+<p>主要程序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A_Star</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#A星算法实现类</span></span><br><span class="line">    <span class="comment">#注意w,h两个参数，如果你修改了地图，需要传入一个正确值或者修改这里的默认参数</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, s_x, s_y, e_x, e_y, w=<span class="number">60</span>, h=<span class="number">30</span>)</span>:</span></span><br><span class="line">        self.s_x = s_x</span><br><span class="line">        self.s_y = s_y</span><br><span class="line">        self.e_x = e_x</span><br><span class="line">        self.e_y = e_y</span><br><span class="line"></span><br><span class="line">        self.width = w</span><br><span class="line">        self.height = h</span><br><span class="line"></span><br><span class="line">        self.open = []</span><br><span class="line">        self.close = []</span><br><span class="line">        self.path = []</span><br><span class="line"></span><br><span class="line">    <span class="comment">#查找路径的入口函数</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find_path</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment">#构建开始节点</span></span><br><span class="line">        p = Node_Elem(<span class="keyword">None</span>, self.s_x, self.s_y, <span class="number">0.0</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            <span class="comment">#扩展F值最小的节点</span></span><br><span class="line">            self.extend_round(p)</span><br><span class="line">            <span class="comment">#如果开放列表为空，则不存在路径，返回</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> self.open:</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="comment">#获取F值最小的节点</span></span><br><span class="line">            idx, p = self.get_best()</span><br><span class="line">            <span class="comment">#找到路径，生成路径，返回</span></span><br><span class="line">            <span class="keyword">if</span> self.is_target(p):</span><br><span class="line">                self.make_path(p)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="comment">#把此节点压入关闭列表，并从开放列表里删除</span></span><br><span class="line">            self.close.append(p)</span><br><span class="line">            <span class="keyword">del</span> self.open[idx]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">make_path</span><span class="params">(self,p)</span>:</span></span><br><span class="line">        <span class="comment">#从结束点回溯到开始点，开始点的parent == None</span></span><br><span class="line">        <span class="keyword">while</span> p:</span><br><span class="line">            self.path.append((p.x, p.y))</span><br><span class="line">            p = p.parent</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">is_target</span><span class="params">(self, i)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> i.x == self.e_x <span class="keyword">and</span> i.y == self.e_y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_best</span><span class="params">(self)</span>:</span></span><br><span class="line">        best = <span class="keyword">None</span></span><br><span class="line">        <span class="comment">#开放列表中最好的值</span></span><br><span class="line">        bv = self.width*self.height*<span class="number">10000</span> <span class="comment">#这个值应该大于地图的最大格子数量</span></span><br><span class="line">        <span class="comment">#开放列表中最好的键</span></span><br><span class="line">        bi = <span class="number">-1</span></span><br><span class="line">        <span class="keyword">for</span> idx, i <span class="keyword">in</span> enumerate(self.open):</span><br><span class="line">            value = self.get_dist(i)<span class="comment">#获取F值</span></span><br><span class="line">            <span class="keyword">if</span> value &lt; bv:<span class="comment">#比以前的更好，即F值更小</span></span><br><span class="line">                best = i</span><br><span class="line">                bv = value</span><br><span class="line">                bi = idx</span><br><span class="line">        <span class="keyword">return</span> bi, best</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_dist</span><span class="params">(self, i)</span>:</span></span><br><span class="line">        <span class="comment"># F = G + H</span></span><br><span class="line">        <span class="comment"># G 为已经走过的路径长度， H为估计还要走多远</span></span><br><span class="line">        <span class="comment"># 这个公式就是A*算法的精华了。</span></span><br><span class="line">        <span class="keyword">return</span> i.dist + math.sqrt((self.e_x-i.x)*(self.e_x-i.x)+ (self.e_y-i.y)*(self.e_y-i.y))*<span class="number">1.4</span><span class="comment">#这里的1.4为优化数字，可选范围[1.0-1.4],</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">extend_round</span><span class="params">(self, p)</span>:</span></span><br><span class="line">        <span class="comment">#可以从8个方向走</span></span><br><span class="line">        xs = (<span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">-1</span>, <span class="number">1</span>, <span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">        ys = (<span class="number">-1</span>,<span class="number">-1</span>,<span class="number">-1</span>,  <span class="number">0</span>, <span class="number">0</span>,  <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        <span class="comment">#只能走上下左右四个方向</span></span><br><span class="line">        <span class="comment">#xs = (0, -1, 1, 0)</span></span><br><span class="line">        <span class="comment">#ys = (-1, 0, 0, 1)</span></span><br><span class="line">        <span class="keyword">for</span> x, y <span class="keyword">in</span> zip(xs, ys):</span><br><span class="line">            new_x, new_y = x + p.x, y + p.y</span><br><span class="line">            <span class="comment">#无效或者不可行走区域，则勿略</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> self.is_valid_coord(new_x, new_y):</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="comment">#构造新的节点</span></span><br><span class="line">            node = Node_Elem(p, new_x, new_y, p.dist+self.get_cost(p.x, p.y, new_x, new_y))</span><br><span class="line">            <span class="comment">#新节点在关闭列表，则忽略</span></span><br><span class="line">            <span class="keyword">if</span> self.node_in_close(node):</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            i = self.node_in_open(node)</span><br><span class="line">            <span class="keyword">if</span> i != <span class="number">-1</span>:</span><br><span class="line">                <span class="comment">#新节点在开放列表</span></span><br><span class="line">                <span class="keyword">if</span> self.open[i].dist &gt; node.dist:</span><br><span class="line">                    <span class="comment">#现在的路径到比以前到这个节点的路径更好~</span></span><br><span class="line">                    <span class="comment">#则使用现在的路径</span></span><br><span class="line">                    self.open[i].parent = p</span><br><span class="line">                    self.open[i].dist = node.dist</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            self.open.append(node)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_cost</span><span class="params">(self, x1, y1, x2, y2)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#上下左右直走，代价为1.0，斜走，代价为1.4</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> x1 == x2 <span class="keyword">or</span> y1 == y2:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1.0</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1.4</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">node_in_close</span><span class="params">(self, node)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> self.close:</span><br><span class="line">            <span class="keyword">if</span> node.x == i.x <span class="keyword">and</span> node.y == i.y:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">node_in_open</span><span class="params">(self, node)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i, n <span class="keyword">in</span> enumerate(self.open):</span><br><span class="line">            <span class="keyword">if</span> node.x == n.x <span class="keyword">and</span> node.y == n.y:</span><br><span class="line">                <span class="keyword">return</span> i</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">is_valid_coord</span><span class="params">(self, x, y)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> x &lt; <span class="number">0</span> <span class="keyword">or</span> x &gt;= self.width <span class="keyword">or</span> y &lt; <span class="number">0</span> <span class="keyword">or</span> y &gt;= self.height:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line">        <span class="keyword">return</span> test_map[y][x] != <span class="string">'#'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_searched</span><span class="params">(self)</span>:</span></span><br><span class="line">        l = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> self.open:</span><br><span class="line">            l.append((i.x, i.y))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> self.close:</span><br><span class="line">            l.append((i.x, i.y))</span><br><span class="line">        <span class="keyword">return</span> l</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>你可以请我喝茶呦 ^_^</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="哎呀是太阳嘛 WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpeg" alt="哎呀是太阳嘛 Alipay">
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>哎呀是太阳嘛</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    
+    <a href="https://leriou.github.io/2015-09-29-Astar-algorithm/" title="学习A*寻路算法">https://leriou.github.io/2015-09-29-Astar-algorithm/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/A-算法/" rel="tag"># A*算法</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+               <div id="needsharebutton-postbottom">
+                 <span class="btn">
+                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                 </span>
+               </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015-09-28-smallpt/" rel="next" title="学习Smallpt全局光照引擎">
+                <i class="fa fa-chevron-left"></i> 学习Smallpt全局光照引擎
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015-12-30-design-pattern/" rel="prev" title="常用的设计模式总结">
+                常用的设计模式总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="哎呀是太阳嘛">
+            
+              <p class="site-author-name" itemprop="name">哎呀是太阳嘛</p>
+              <p class="site-description motion-element" itemprop="description">君子生非异也, 善假于物也</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/leriou" title="GitHub &rarr; https://github.com/leriou" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://plus.google.com/yange1876" title="Google &rarr; https://plus.google.com/yange1876" rel="noopener" target="_blank"><i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/yange1876" title="Twitter &rarr; https://twitter.com/yange1876" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/1985364641" title="Weibo &rarr; https://weibo.com/1985364641" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#A-寻路"><span class="nav-number">1.</span> <span class="nav-text">A*寻路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景介绍"><span class="nav-number">1.1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寻路过程"><span class="nav-number">1.2.</span> <span class="nav-text">寻路过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-寻路的主要过程"><span class="nav-number">1.3.</span> <span class="nav-text">A*寻路的主要过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-的变种"><span class="nav-number">1.4.</span> <span class="nav-text">A*的变种</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寻路算法的应用"><span class="nav-number">1.5.</span> <span class="nav-text">寻路算法的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐阅读"><span class="nav-number">1.6.</span> <span class="nav-text">推荐阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码演示"><span class="nav-number">1.7.</span> <span class="nav-text">代码演示</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wifi"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">connect to Leriou</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  <script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  <script>
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+      el: '#comments' ,
+      verify: false,
+      notify: false,
+      appId: 'd3Ferur4FUri7vERAylGpome-gzGzoHsz',
+      appKey: 'uRGeMnmfAq6h88QavSUfpS3q',
+      placeholder: '你不想说点什么吗 ???',
+      avatar: 'retro',
+      meta:guest,
+      pageSize: '10' || 10,
+      visitor: true
+    });
+  </script>
+
+
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "default";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "middle + left";
+      
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="/js/src/js.cookie.js?v=6.6.0"></script>
+  <script src="/js/src/scroll-cookie.js?v=6.6.0"></script>
+
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('Copy').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function () {
+          $b.text('Copy');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>
