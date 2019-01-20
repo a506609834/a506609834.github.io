@@ -108,18 +108,18 @@
 
 
 
-  <meta name="description" content="背景因为业务需要, 公司非常现在需要一个实时的计算平台来支撑上层的各种业务 借这个机会, 对相关的技术部分进行了整理 业务场景分析下面拿我自己经历的两个项目来探讨一下实时计算平台的构建和使用 以及其中遇到的一些坑 统一的产品池需求 统一产品容器  由于公司部门比较分散,公司的不同品类的产品(在线旅游公司)分属不同的BU(Business Unit),不同部门之间不仅数据不互通, 而且使用的数据库,">
+  <meta name="description" content="背景因为业务需要, 公司现在需要一个实时的计算平台来支撑上层的各种业务 借这个机会, 对我们用到的相关技术部分进行了整理 业务场景分析下面拿我自己经历的两个项目来探讨一下实时计算平台的构建和使用 以及其中遇到的一些坑 业务1. 统一的产品池服务需求 统一产品数据池  由于公司部门比较分散,公司的不同品类的产品(在线旅游公司)分属不同的BU(Business Unit),不同部门之间不仅数据不互通,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="实时数据处理系统总结">
+<meta property="og:title" content="初步探索实时数据处理系统">
 <meta property="og:url" content="https://leriou.github.io/2018-09-30-real_time_proccess/index.html">
 <meta property="og:site_name" content="Leriou&#39;s Tavern">
-<meta property="og:description" content="背景因为业务需要, 公司非常现在需要一个实时的计算平台来支撑上层的各种业务 借这个机会, 对相关的技术部分进行了整理 业务场景分析下面拿我自己经历的两个项目来探讨一下实时计算平台的构建和使用 以及其中遇到的一些坑 统一的产品池需求 统一产品容器  由于公司部门比较分散,公司的不同品类的产品(在线旅游公司)分属不同的BU(Business Unit),不同部门之间不仅数据不互通, 而且使用的数据库,">
+<meta property="og:description" content="背景因为业务需要, 公司现在需要一个实时的计算平台来支撑上层的各种业务 借这个机会, 对我们用到的相关技术部分进行了整理 业务场景分析下面拿我自己经历的两个项目来探讨一下实时计算平台的构建和使用 以及其中遇到的一些坑 业务1. 统一的产品池服务需求 统一产品数据池  由于公司部门比较分散,公司的不同品类的产品(在线旅游公司)分属不同的BU(Business Unit),不同部门之间不仅数据不互通,">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://leriou.github.io/2018-09-30-real_time_proccess/productpool.jpg">
-<meta property="og:updated_time" content="2018-12-30T05:37:51.301Z">
+<meta property="og:updated_time" content="2019-01-20T12:28:11.429Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="实时数据处理系统总结">
-<meta name="twitter:description" content="背景因为业务需要, 公司非常现在需要一个实时的计算平台来支撑上层的各种业务 借这个机会, 对相关的技术部分进行了整理 业务场景分析下面拿我自己经历的两个项目来探讨一下实时计算平台的构建和使用 以及其中遇到的一些坑 统一的产品池需求 统一产品容器  由于公司部门比较分散,公司的不同品类的产品(在线旅游公司)分属不同的BU(Business Unit),不同部门之间不仅数据不互通, 而且使用的数据库,">
+<meta name="twitter:title" content="初步探索实时数据处理系统">
+<meta name="twitter:description" content="背景因为业务需要, 公司现在需要一个实时的计算平台来支撑上层的各种业务 借这个机会, 对我们用到的相关技术部分进行了整理 业务场景分析下面拿我自己经历的两个项目来探讨一下实时计算平台的构建和使用 以及其中遇到的一些坑 业务1. 统一的产品池服务需求 统一产品数据池  由于公司部门比较分散,公司的不同品类的产品(在线旅游公司)分属不同的BU(Business Unit),不同部门之间不仅数据不互通,">
 <meta name="twitter:image" content="https://leriou.github.io/2018-09-30-real_time_proccess/productpool.jpg">
 
 
@@ -137,7 +137,7 @@
   };
 </script>
 
-  <title>实时数据处理系统总结 | Leriou's Tavern</title>
+  <title>初步探索实时数据处理系统 | Leriou's Tavern</title>
   
 
 
@@ -432,7 +432,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">实时数据处理系统总结
+          <h2 class="post-title" itemprop="name headline">初步探索实时数据处理系统
 
               
             
@@ -475,7 +475,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-12-30 13:37:51" itemprop="dateModified" datetime="2018-12-30T13:37:51+08:00">2018-12-30</time>
+                <time title="Modified: 2019-01-20 20:28:11" itemprop="dateModified" datetime="2019-01-20T20:28:11+08:00">2019-01-20</time>
               
             
           </span>
@@ -498,7 +498,7 @@
 
           
           
-             <span id="/2018-09-30-real_time_proccess/" class="leancloud_visitors" data-flag-title="实时数据处理系统总结">
+             <span id="/2018-09-30-real_time_proccess/" class="leancloud_visitors" data-flag-title="初步探索实时数据处理系统">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -529,15 +529,15 @@
       
 
       
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>因为业务需要, 公司非常现在需要一个实时的计算平台来支撑上层的各种业务</p>
-<p>借这个机会, 对相关的技术部分进行了整理</p>
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>因为业务需要, 公司现在需要一个实时的计算平台来支撑上层的各种业务</p>
+<p>借这个机会, 对我们用到的相关技术部分进行了整理</p>
 <h1 id="业务场景分析"><a href="#业务场景分析" class="headerlink" title="业务场景分析"></a>业务场景分析</h1><p>下面拿我自己经历的两个项目来探讨一下实时计算平台的构建和使用</p>
 <p>以及其中遇到的一些坑</p>
-<h2 id="统一的产品池"><a href="#统一的产品池" class="headerlink" title="统一的产品池"></a>统一的产品池</h2><h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><ul>
-<li>统一产品容器</li>
+<h2 id="业务1-统一的产品池服务"><a href="#业务1-统一的产品池服务" class="headerlink" title="业务1. 统一的产品池服务"></a>业务1. 统一的产品池服务</h2><h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><ul>
+<li>统一产品数据池</li>
 </ul>
-<p>由于公司部门比较分散,公司的不同品类的产品(在线旅游公司)分属不同的BU(Business Unit),不同部门之间不仅数据不互通, 而且使用的数据库,产品数据结构和使用的存储技术也都不相同,数据库存储主要使用Oracle和MySQL  </p>
-<p>我们组的业务由于含有统一的列表页和内容服务,所有分类产品的相关信息都需要进行聚合展示, 同时考虑到产品数据的热点特性  </p>
+<p>由于公司部门比较分散,公司的不同品类的产品(在线旅游公司)分属不同的BU(Business Unit),不同部门之间不仅数据不互通, 而且使用的数据库,产品数据结构和使用的存储技术也都不相同, 数据库存储主要使用Oracle和MySQL  </p>
+<p>我们组的业务由于含有统一的列表页和内容服务, 所有分类产品的相关信息都需要进行聚合展示, 同时考虑到产品数据的热点特性  </p>
 <p>我们需要一个统一的产品池功能来提供最基本的产品信息查询, 之后所有组内的产品信息统统通过产品池进行获取, 这样把数据和业务进行充分解耦  </p>
 <p>上层业务不需要了解各种分类的产品信息的存储位置和处理逻辑,只需要从统一的产品池获取产品信息即可  </p>
 <p>同时作为基础的数据服务还需要保证服务的性能和高可用性   </p>
@@ -549,37 +549,55 @@
 </ol>
 <h3 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h3><p><img src="productpool.jpg" alt="产品池"></p>
 <p>其中各组件的主要功能:</p>
-<p>Redis: 提供前台api接口的产品基础信息查询功能</p>
-<p>Elasticsearch:  提供后台和前台对产品的搜索功能</p>
-<p>kafka: 数据总线</p>
-<p>mysql/oracle: 数据源</p>
-<p>storm: 产品信息计算</p>
-<ul>
-<li><p>定时的产品id添加: 定期进行全量的产品数据重建,为了方便控制重建过程,将要处理的产品id分批存入kafka中的<code>全量重建topic</code>  </p>
-</li>
-<li><p>失效的产品id: 当某个产品不存在于redis中时,也会重新放入kafka的另外的<code>miss产品topic</code>中进行重建  </p>
-</li>
-<li><p>当产品信息变更时候也会有对应的变更产品id入kafka的<code>变更产品topic</code>中进行重建  </p>
-</li>
-<li><p>处理产品时会从这三个源topic中读取需要重建的产品,交给storm进行产品信息计算  </p>
-</li>
-<li><p>storm中构建失败的产品(数据库中不存在等原因),会在redis中进行标记暂时不可用(有效期1天), 不可用的产品不会继续进行重建  </p>
-</li>
-<li><p>kafka多个topic中的消息含有需要构建的 产品id和产品需要构建的内容, 也就是说可以通过消息内容格式控制构建产品的某个部分的信息(例如: 只更新产品的基本信息, 只更新价格信息, 只更新评论数,好评数等信息)</p>
-</li>
-<li>storm从kafka中获取消息, 进行产品的信息计算,计算完成的信息会重新返回kafka</li>
-<li>整合各个分类topic的产品计算结果, 写入redis和es</li>
-</ul>
-<blockquote>
-<p>ps:之所以产品信息计算要进行拆分是因为不同BU的产品计算逻辑不同, 拆分独立的topic,如果将来其他的小组使用只需要产品信息时只需要订阅对应的topic消息即可</p>
-</blockquote>
+<p><code>Redis</code>: 存储k-v结构的产品信息, 提供前台api接口的产品基础信息查询数据</p>
+<p><code>Elasticsearch</code>: 提供后台和部分前台对产品的搜索功能</p>
+<p><code>kafka</code>: 数据总线, 后台数据流转的核心</p>
+<p><code>mysql/oracle</code>: 提供最初始的数据源</p>
+<p><code>storm</code>: 产品信息计算</p>
 <h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><h4 id="前台api获取产品的流程"><a href="#前台api获取产品的流程" class="headerlink" title="前台api获取产品的流程"></a>前台api获取产品的流程</h4><div id="flowchart-0" class="flow-chart"></div>
 
 <h4 id="后台构建产品的流程"><a href="#后台构建产品的流程" class="headerlink" title="后台构建产品的流程"></a>后台构建产品的流程</h4><div id="flowchart-1" class="flow-chart"></div>
 
-<h3 id="产品数据更新"><a href="#产品数据更新" class="headerlink" title="产品数据更新"></a>产品数据更新</h3><p>通过<code>canal</code>监听mysql数据库的产品表数据变更,将变更数据发给kafka中的<code>产品表日志topic</code>, 后续从kafka的<code>产品日志topic</code> ,根据数据内容解析出来产品更新事件, 封装对应的事件消息, 存入<code>产品事件topic</code>  </p>
+<h3 id="详细步骤描述"><a href="#详细步骤描述" class="headerlink" title="详细步骤描述"></a>详细步骤描述</h3><ul>
+<li><p>定时的产品id添加: 定期进行全量的产品数据重建, 为了方便控制重建过程, 将要处理的产品id分批存入kafka中的<code>全量重建topic</code>, 也就是把批处理转化为流处理  </p>
+</li>
+<li><p>失效的产品id: 当某个产品不存在于redis中时, 也会重新放入kafka的另外的<code>miss产品topic</code>中进行重建  </p>
+</li>
+<li><p>当产品信息变更时候也会有对应的变更产品id入kafka的<code>变更产品topic</code>中进行重建  </p>
+</li>
+<li><p>处理产品时会从以上三个产品源topic中读取需要重建的产品, 根据分类发放到<code>不同的分类topic</code>, 然后交给storm进行产品信息计算, 这部分信息只有简单的产品ID和更新类型标识  </p>
+</li>
+<li><p>storm中构建失败的产品(数据库中不存在等原因), 会在redis中进行标记暂时不可用(有效期1天), 不可用的产品不会继续进行重建  </p>
+</li>
+<li><p>kafka多个topic中的消息含有需要构建的 产品id和产品需要构建的内容, 也就是说可以通过消息内容格式控制构建产品的某个部分的信息(例如: 只更新产品的基本信息, 只更新价格信息, 只更新评论数,好评数等信息)</p>
+</li>
+<li><p>storm从kafka中获取消息, 进行产品的信息计算, 计算完成的信息会重新返回kafka, 同样根据产品分类发放到不同的<code>分类topic</code>, 这部分信息含有全量的产品信息数据</p>
+</li>
+<li><p>整合各个分类topic的产品计算结果, 写入redis 和 es, 并回写部分mysql表</p>
+</li>
+</ul>
+<h3 id="产品数据更新"><a href="#产品数据更新" class="headerlink" title="产品数据更新"></a>产品数据更新</h3><p>通过<code>canal</code>监听mysql数据库的产品表数据变更, 将变更数据发给kafka中的<code>产品表日志topic</code>, 后续从kafka的<code>产品日志topic</code> ,根据数据内容解析出来产品更新事件, 封装对应的事件消息, 存入<code>产品事件topic</code>  </p>
 <p>通过读取<code>产品事件topic</code>中的数据, 根据品类和变更内容, 向产品池<code>变更产品topic中发送</code>发送产品池信息重构需求</p>
-<h2 id="用户画像之用户信息完善系统"><a href="#用户画像之用户信息完善系统" class="headerlink" title="用户画像之用户信息完善系统"></a>用户画像之用户信息完善系统</h2><h3 id="需求-1"><a href="#需求-1" class="headerlink" title="需求"></a>需求</h3><p>这个项目是用户画像的子项目, 目的是将用户分布在不同BU的信息进行整合, 提供一份统一最完整的用户信息出来</p>
+<h3 id="为什么要分多个产品数据源topic"><a href="#为什么要分多个产品数据源topic" class="headerlink" title="为什么要分多个产品数据源topic"></a>为什么要分多个产品数据源topic</h3><ol>
+<li><p>为了优先级考虑, 不同来源的产品对时效性要求是不同的, 但是kafka本身又做不了带有优先级的消息处理</p>
+</li>
+<li><p>不同的分类的产品的处理逻辑不同, 更新频率和数据量也不同, 提前进行分流</p>
+</li>
+</ol>
+<h3 id="为什么不同分类的产品要用不同的写入topic"><a href="#为什么不同分类的产品要用不同的写入topic" class="headerlink" title="为什么不同分类的产品要用不同的写入topic"></a>为什么不同分类的产品要用不同的写入topic</h3><ol>
+<li>如果有其他业务需要使用其中某个分类的产品数据只需订阅对应的产品topic流就可以了, 免去了从全量产品流中过滤的步骤 </li>
+</ol>
+<h3 id="为什么最后还要把产品信息吐会回kafka"><a href="#为什么最后还要把产品信息吐会回kafka" class="headerlink" title="为什么最后还要把产品信息吐会回kafka"></a>为什么最后还要把产品信息吐会回kafka</h3><ol>
+<li><p>为了统一控制写入源并做优化, 使用统一的topic存储数据可以让整个程序只有一个数据写入的源, 所有写入操作统统使用写总线来处理, 解耦了功能, 提高了可靠性, 扩展性和可维护性</p>
+</li>
+<li><p>可以对数据写入做优化, 比如:幂等处理, 批压缩写入处理, ABA问题的重写</p>
+</li>
+<li><p>为了数据重用, 因为其他部分业务组也可能需要使用产品信息, 到时候直接订阅最终的产品信息表就可以了</p>
+</li>
+<li><p>为了方便扩展, 如果将来数据量大, 出现了写入瓶颈, 只要对这一部分承担写总线功能的写入程序进行扩展就可以了</p>
+</li>
+</ol>
+<h2 id="业务2-用户画像之用户信息完善系统"><a href="#业务2-用户画像之用户信息完善系统" class="headerlink" title="业务2. 用户画像之用户信息完善系统"></a>业务2. 用户画像之用户信息完善系统</h2><h3 id="需求-1"><a href="#需求-1" class="headerlink" title="需求"></a>需求</h3><p>这个项目是用户画像的子项目, 目的是将用户分布在不同BU的信息进行整合, 提供一份统一最完整的用户信息出来</p>
 <p>同时进行一些数据清洗和数据统计</p>
 <ul>
 <li>对分散在各个表中的会员信息进行梳理, 整合一份相对比较完善的用户信息</li>
@@ -600,6 +618,9 @@
 <li>对接各数据源, 根据用户身份表示整合统一的用户信息</li>
 <li>统一存储用户信息</li>
 </ol>
+<blockquote>
+<p>ps:由于部分原因, 项目的实际开发时间很短, 只有200左右的工时, 也就是一个人工作一个月, 而且大部分时间都花在内部数据问题的处理上面, 所以项目未能做到最终非常完善的程度</p>
+</blockquote>
 <h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ol>
 <li>定期的全量用户信息补全</li>
 <li>用户信息变更以后触发的补全</li>
@@ -613,8 +634,7 @@
 <p><code>storm</code> 则承担了主要的计算任务和部分数据转发功能  </p>
 <p>其他 <code>mysql</code>, <code>redis</code>,<code>elasticsearch</code>则一直充当数据提供方和数据使用方(业务)之间的网关作用   </p>
 <p>这一套消息处理流程目前来看还没遇到太大的问题, 但是因为我们部门业务相对比较单一, 尚不能完全发挥这套架构的潜力  </p>
-<p>希望以后可以多尝试, 并进行改进</p>
-<p><script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: Start
+<p>希望以后可以多尝试, 并进行改进<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: Start
 
 cronProductId=>operation: 定时的产品id添加
 
@@ -719,7 +739,7 @@ st->getpid->sepPid->forStorm->returnKafka->mergeInfo->writeRedis->e</textarea><t
   <li class="post-copyright-link">
     <strong>Post link: </strong>
     
-    <a href="https://leriou.github.io/2018-09-30-real_time_proccess/" title="实时数据处理系统总结">https://leriou.github.io/2018-09-30-real_time_proccess/</a>
+    <a href="https://leriou.github.io/2018-09-30-real_time_proccess/" title="初步探索实时数据处理系统">https://leriou.github.io/2018-09-30-real_time_proccess/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
@@ -1069,7 +1089,7 @@ st->getpid->sepPid->forStorm->returnKafka->mergeInfo->writeRedis->e</textarea><t
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#业务场景分析"><span class="nav-number">2.</span> <span class="nav-text">业务场景分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#统一的产品池"><span class="nav-number">2.1.</span> <span class="nav-text">统一的产品池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求"><span class="nav-number">2.1.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件"><span class="nav-number">2.1.2.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目详情"><span class="nav-number">2.1.3.</span> <span class="nav-text">项目详情</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整体结构"><span class="nav-number">2.1.4.</span> <span class="nav-text">整体结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程图"><span class="nav-number">2.1.5.</span> <span class="nav-text">流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#前台api获取产品的流程"><span class="nav-number">2.1.5.1.</span> <span class="nav-text">前台api获取产品的流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后台构建产品的流程"><span class="nav-number">2.1.5.2.</span> <span class="nav-text">后台构建产品的流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#产品数据更新"><span class="nav-number">2.1.6.</span> <span class="nav-text">产品数据更新</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户画像之用户信息完善系统"><span class="nav-number">2.2.</span> <span class="nav-text">用户画像之用户信息完善系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目详情-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">项目详情</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程"><span class="nav-number">2.2.4.</span> <span class="nav-text">流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#业务场景分析"><span class="nav-number">2.</span> <span class="nav-text">业务场景分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#业务1-统一的产品池服务"><span class="nav-number">2.1.</span> <span class="nav-text">业务1. 统一的产品池服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求"><span class="nav-number">2.1.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件"><span class="nav-number">2.1.2.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目详情"><span class="nav-number">2.1.3.</span> <span class="nav-text">项目详情</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整体结构"><span class="nav-number">2.1.4.</span> <span class="nav-text">整体结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程图"><span class="nav-number">2.1.5.</span> <span class="nav-text">流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#前台api获取产品的流程"><span class="nav-number">2.1.5.1.</span> <span class="nav-text">前台api获取产品的流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后台构建产品的流程"><span class="nav-number">2.1.5.2.</span> <span class="nav-text">后台构建产品的流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详细步骤描述"><span class="nav-number">2.1.6.</span> <span class="nav-text">详细步骤描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#产品数据更新"><span class="nav-number">2.1.7.</span> <span class="nav-text">产品数据更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要分多个产品数据源topic"><span class="nav-number">2.1.8.</span> <span class="nav-text">为什么要分多个产品数据源topic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么不同分类的产品要用不同的写入topic"><span class="nav-number">2.1.9.</span> <span class="nav-text">为什么不同分类的产品要用不同的写入topic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么最后还要把产品信息吐会回kafka"><span class="nav-number">2.1.10.</span> <span class="nav-text">为什么最后还要把产品信息吐会回kafka</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#业务2-用户画像之用户信息完善系统"><span class="nav-number">2.2.</span> <span class="nav-text">业务2. 用户画像之用户信息完善系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目详情-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">项目详情</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程"><span class="nav-number">2.2.4.</span> <span class="nav-text">流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
