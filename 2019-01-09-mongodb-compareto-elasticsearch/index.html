@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="Leriou&#39;s Tavern">
 <meta property="og:description" content="MongoDB  vs Elasticsearch    MongoDB ElasticSearch 备注     定位 (文档型)数据库 (文档型)搜索引擎 一个管理数据,一个检索数据   资源占用 一般 高 mongo使用c++, es使用Java开发   写入延迟 低 高 es的写入延迟默认1s, 可配置, 但是要牺牲一些东西   全文索引支持度 一般 非常好 es本来就是搜索引擎, 这个没">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-01-10T12:54:46.320Z">
+<meta property="og:updated_time" content="2019-01-20T11:50:54.616Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MongoDB和Elasticsearch的对比">
 <meta name="twitter:description" content="MongoDB  vs Elasticsearch    MongoDB ElasticSearch 备注     定位 (文档型)数据库 (文档型)搜索引擎 一个管理数据,一个检索数据   资源占用 一般 高 mongo使用c++, es使用Java开发   写入延迟 低 高 es的写入延迟默认1s, 可配置, 但是要牺牲一些东西   全文索引支持度 一般 非常好 es本来就是搜索引擎, 这个没">
@@ -474,7 +474,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-01-10 20:54:46" itemprop="dateModified" datetime="2019-01-10T20:54:46+08:00">2019-01-10</time>
+                <time title="Modified: 2019-01-20 19:50:54" itemprop="dateModified" datetime="2019-01-20T19:50:54+08:00">2019-01-20</time>
               
             
           </span>
@@ -637,8 +637,8 @@
 </tbody>
 </table>
 <h2 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h2><p>MongoDB和Elasticsearch虽然很多功能和特性高度重合, 但是定位完全不同     </p>
-<p>MongoDB 是 <strong>文档型数据库</strong>,  提供<strong>数据存储和管理服务</strong></p>
-<p>Elasticsearch 是<strong>搜索引擎</strong>, 提供<strong>数据检索服务</strong></p>
+<p>MongoDB 是 <strong>文档型数据库</strong>,  提供 <strong>数据存储和管理服务</strong></p>
+<p>Elasticsearch 是<strong>搜索引擎</strong>, 提供 <strong>数据检索服务</strong></p>
 <p>两者的很大区别在于 <strong>元数据</strong>(没有写错, 不是源数据)的存储和管理, MongoDB作为一个数据库产品, 是可以作为<strong>元数据</strong>管理者的     </p>
 <p>Elasticsearch作为一个搜索引擎, 定位是<strong>提供数据检索服务</strong>, 也就是说我只管查, 不管写 ^_^, Elasticsearch的Mapping不可变也是为此服务的, 带来的代价就是<code>es不适合作为数据管理者</code>, es可以从其他数据源同步数据过来提供查询, 但是不适合自己对数据进行存储和管理 </p>
 <blockquote>
@@ -646,7 +646,7 @@
 </blockquote>
 <p>由此可见, 对于个人, 如果你有一批数据要看, 但是不经常进行修改, 这个时候毫无疑问可以用es, 但是如果你还打算继续修改数据, 最好就是使用MongoDB</p>
 <h2 id="全文索引-读取性能和写入延迟"><a href="#全文索引-读取性能和写入延迟" class="headerlink" title="全文索引, 读取性能和写入延迟"></a>全文索引, 读取性能和写入延迟</h2><p>MongoDB和ElasticSearch都支持全文索引, 虽然MongoDB的全文索引完全无法跟es相提并论, es毕竟是专业的搜索引擎产品, 着重提供数据的检所支持, 这方面吊打MongoDB也是可以理解的</p>
-<p>MongoDB虽然在支持的查询功能上稍微弱于es, 但是在大部分场景下性能方面完爆es, 不管是读性能, 还是写性能</p>
+<p>MongoDB虽然在支持的部分查询功能上稍微弱于es, 但是在大部分场景下性能方面完爆es, 不管是读性能, 还是写性能</p>
 <p>es的写入延迟默认为1s, 这个虽然不能算入写入性能, 但是毫无疑问是一大缺点, 虽然可以配置为更短的时间, 但是这样就要牺牲一定的数据吞吐量, 和更频繁的磁盘刷新操作</p>
 <p>es底层使用<code>Lucene</code>作为核心引擎, 很多设计就是为了匹配Lucene中的概念, 其实es可以看成一个Lucene的proxy层包装, 整体来说两个系统有一定的嫌隙</p>
 <p>MongoDB则是完整的一个单体数据库产品, 内部的存储引擎也是可插拔式的, 产品之间的结合相对更紧密一点 </p>
@@ -677,27 +677,30 @@
 <h3 id="弱事务"><a href="#弱事务" class="headerlink" title="弱事务"></a>弱事务</h3><p>MongoDB以前只是支持统一文档内的原子更新,以此来实现伪事务功能, 不过Mongo4.0 以后大大加强了事务方面的能力 </p>
 <h3 id="无join支持"><a href="#无join支持" class="headerlink" title="无join支持"></a>无join支持</h3><p>文档型数据库都不支持join, 但是我也用不上join的功能 ,不过据说未来Mongo4.2版本会带来对join的支持</p>
 <p>不支持join带来的问题就是我们需要自己对数据进行连接, 但是这并非不能解决的问题, 相应的对使用SQL的数据分析师就不大友好</p>
-<h3 id="Bully的选主算法的缺陷"><a href="#Bully的选主算法的缺陷" class="headerlink" title="Bully的选主算法的缺陷"></a>Bully的选主算法的缺陷</h3><p>elasticsearch和MongoDB选择的选主算法实现很简单, 但是有几率出现脑裂的情况, 当然, 具体情况跟配置也有关系</p>
+<h3 id="Bully的选主算法的缺陷"><a href="#Bully的选主算法的缺陷" class="headerlink" title="Bully的选主算法的缺陷"></a>Bully的选主算法的缺陷</h3><p>elasticsearch和MongoDB选择的选主算法实现很简单, 但是有几率出现脑裂的情况, 当然, 具体情况跟配置也有关系(比如:你有三个es节点但是设置的最小主节点数为1, 将最小主节点数设置为2可以避免脑裂情况)</p>
 <p>即使出现了脑裂的情况, 使用<code>重启大法</code>一般就能解决 ^_^</p>
 <p>总体来说, 这方面不如使用Paxos和Raft算法的其他分布式系统靠谱</p>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
 <li>运维工具</li>
 </ul>
 <p>两者背后都有商业公司的支持</p>
-<p>MongoDB的很多客户端和运维工具更丰富</p>
-<p>Elasticsearch则有整套的数据分析和收集工具提供</p>
+<p>MongoDB的很多客户端和运维工具更丰富, 但是MongoDB作为一个数据库产品, 相对应的对运维人员的要求也要更高一点</p>
+<p>Elasticsearch则有整套的数据分析和收集工具提供, 配套的kibana就是一个很不错的管控es的工具</p>
 <ul>
 <li>操作接口</li>
 </ul>
 <p>es使用Restful来提供统一的操作接口, 屏蔽了各种语言之间的障碍</p>
 <p>但是同样带来了表达能力和性能的损失</p>
 <p>MongoDB则使用TCP, 降低了序列化和网络这一层的性能损耗, 并最大程度保留了接口的内容表达能力</p>
-<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>MongoDB有多个存储引擎可以选择, 总的来说MongoDB更倾向于数据的存储和管理 </p>
-<p>Elasticsearch则有很多插件可以使用, Elasticsearch更倾向于数据的查询</p>
+<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>两者其实在很多使用场景上有重合之处, 可以互相替代, 比如日志收集</p>
+<p>进一步来说</p>
+<p>MongoDB有多个存储引擎可以选择, 而且MongoDB不仅看重数据的分析, 对数据的管理同样看重, 总的来说MongoDB更倾向于数据的存储和管理, 可以作为数据源对外提供</p>
+<p>Elasticsearch则有很多插件可以使用, 相对来讲Elasticsearch更倾向于数据的查询, 一般情况下elasticsearch仅作为数据检索服务和数据分析平台, 不直接存储源数据</p>
 <ul>
 <li>MongoDB适合</li>
 </ul>
 <ol>
+<li>对服务可用性和一致性有高要求</li>
 <li>无schema的数据存储+需要索引数据</li>
 <li>高读写性能要求, 数据结构简单的海量数据场景</li>
 <li>有热点数据, 有数据分片需求的数据存储</li>
@@ -708,8 +711,10 @@
 <li>Elasticsearch适合</li>
 </ul>
 <ol>
-<li>大数据量的检索</li>
-<li>监控信息/ 日志信息检索</li>
+<li>已经有其他系统负责数据管理</li>
+<li>无schema的大数据量的数据检索</li>
+<li>对查询性能有要求, 对写性能要求不高</li>
+<li>监控信息/日志信息检索</li>
 </ol>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>MongoDB和Elasticsearch都是我比较喜欢的存储产品</p>
 <p>两者的功能特性也存在很多重合的地方, 其实现在很多数据库产品都在互相学习, 都在逐渐变得相似</p>
