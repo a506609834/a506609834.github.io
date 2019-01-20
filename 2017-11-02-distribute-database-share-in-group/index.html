@@ -108,19 +108,19 @@
 
 
 
-  <meta name="description" content="分布式服务常用的设计思想什么是集群? 什么是分布式? 集群:   一个任务多个人可以做(实际是一个人做),通过冗余解决单点故障问题 分布式: 一个任务拆分成多个部分由多个人来做,解决业务解耦,水平扩展和性能问题    名称 类型 方式 故障转移 底层存储     kafka 消息系统 broker-&amp;gt;partition partition选举 file   redis 缓存 instance">
+  <meta name="description" content="这个是写给组内成员的分布式知识简单分享 什么是分布式什么是集群? 什么是分布式?集群:   一个任务多个人可以做(实际是一个人做),通过冗余解决单点故障问题分布式: 一个任务拆分成多个部分由多个人来做,解决业务解耦,水平扩展和性能问题    几个典型的分布式系统:    名称 类型 数据分布方式 故障转移 底层存储     kafka 消息系统 broker-&amp;gt;partition parti">
 <meta name="keywords" content="分布式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式服务组内分享">
 <meta property="og:url" content="https://leriou.github.io/2017-11-02-distribute-database-share-in-group/index.html">
 <meta property="og:site_name" content="Leriou&#39;s Tavern">
-<meta property="og:description" content="分布式服务常用的设计思想什么是集群? 什么是分布式? 集群:   一个任务多个人可以做(实际是一个人做),通过冗余解决单点故障问题 分布式: 一个任务拆分成多个部分由多个人来做,解决业务解耦,水平扩展和性能问题    名称 类型 方式 故障转移 底层存储     kafka 消息系统 broker-&amp;gt;partition partition选举 file   redis 缓存 instance">
+<meta property="og:description" content="这个是写给组内成员的分布式知识简单分享 什么是分布式什么是集群? 什么是分布式?集群:   一个任务多个人可以做(实际是一个人做),通过冗余解决单点故障问题分布式: 一个任务拆分成多个部分由多个人来做,解决业务解耦,水平扩展和性能问题    几个典型的分布式系统:    名称 类型 数据分布方式 故障转移 底层存储     kafka 消息系统 broker-&amp;gt;partition parti">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://leriou.github.io/2017-11-02-distribute-database-share-in-group/cap.jpg">
-<meta property="og:updated_time" content="2018-12-22T08:56:57.000Z">
+<meta property="og:updated_time" content="2019-01-20T13:50:17.882Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式服务组内分享">
-<meta name="twitter:description" content="分布式服务常用的设计思想什么是集群? 什么是分布式? 集群:   一个任务多个人可以做(实际是一个人做),通过冗余解决单点故障问题 分布式: 一个任务拆分成多个部分由多个人来做,解决业务解耦,水平扩展和性能问题    名称 类型 方式 故障转移 底层存储     kafka 消息系统 broker-&amp;gt;partition partition选举 file   redis 缓存 instance">
+<meta name="twitter:description" content="这个是写给组内成员的分布式知识简单分享 什么是分布式什么是集群? 什么是分布式?集群:   一个任务多个人可以做(实际是一个人做),通过冗余解决单点故障问题分布式: 一个任务拆分成多个部分由多个人来做,解决业务解耦,水平扩展和性能问题    几个典型的分布式系统:    名称 类型 数据分布方式 故障转移 底层存储     kafka 消息系统 broker-&amp;gt;partition parti">
 <meta name="twitter:image" content="https://leriou.github.io/2017-11-02-distribute-database-share-in-group/cap.jpg">
 
 
@@ -316,7 +316,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives<span class="badge">49</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives<span class="badge">48</span></a>
 
   </li>
         
@@ -476,7 +476,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-12-22 16:56:57" itemprop="dateModified" datetime="2018-12-22T16:56:57+08:00">2018-12-22</time>
+                <time title="Modified: 2019-01-20 21:50:17" itemprop="dateModified" datetime="2019-01-20T21:50:17+08:00">2019-01-20</time>
               
             
           </span>
@@ -548,15 +548,15 @@
       
 
       
-        <h1 id="分布式服务常用的设计思想"><a href="#分布式服务常用的设计思想" class="headerlink" title="分布式服务常用的设计思想"></a>分布式服务常用的设计思想</h1><p>什么是集群? 什么是分布式?</p>
-<p>集群:   一个任务多个人可以做(实际是一个人做),通过冗余解决单点故障问题</p>
-<p>分布式: 一个任务拆分成多个部分由多个人来做,解决业务解耦,水平扩展和性能问题</p>
+        <p>这个是写给组内成员的分布式知识简单分享</p>
+<h1 id="什么是分布式"><a href="#什么是分布式" class="headerlink" title="什么是分布式"></a>什么是分布式</h1><p>什么是集群? 什么是分布式?<br>集群:   一个任务多个人可以做(实际是一个人做),通过冗余解决单点故障问题<br>分布式: 一个任务拆分成多个部分由多个人来做,解决业务解耦,水平扩展和性能问题   </p>
+<p>几个典型的分布式系统:</p>
 <table>
 <thead>
 <tr>
 <th style="text-align:center">名称</th>
 <th style="text-align:center">类型</th>
-<th style="text-align:center">方式</th>
+<th style="text-align:center">数据分布方式</th>
 <th style="text-align:center">故障转移</th>
 <th style="text-align:center">底层存储</th>
 </tr>
@@ -580,14 +580,14 @@
 <td style="text-align:center">es</td>
 <td style="text-align:center">搜索服务</td>
 <td style="text-align:center">node-&gt;shard</td>
-<td style="text-align:center">master选举</td>
+<td style="text-align:center">master选举和partition选举</td>
 <td style="text-align:center">file</td>
 </tr>
 <tr>
 <td style="text-align:center">Tidb</td>
 <td style="text-align:center">数据库</td>
 <td style="text-align:center">TiDB+TiKV+PD</td>
-<td style="text-align:center">集群</td>
+<td style="text-align:center">node选举</td>
 <td style="text-align:center">file</td>
 </tr>
 <tr>
@@ -599,46 +599,40 @@
 </tr>
 </tbody>
 </table>
-<h2 id="分布式要解决的常见问题"><a href="#分布式要解决的常见问题" class="headerlink" title="分布式要解决的常见问题"></a>分布式要解决的常见问题</h2><p>分布式要满足三个特性 CAP(C:一致性, P:分区容忍性, A:可用性)</p>
+<h2 id="分布式要解决的常见问题"><a href="#分布式要解决的常见问题" class="headerlink" title="分布式要解决的常见问题"></a>分布式要解决的常见问题</h2><p>分布式要满足三个特性之二 CAP(C:一致性, P:分区容忍性, A:可用性)</p>
 <ul>
 <li>一致性（C）：在分布式系统中的所有数据备份，在同一时刻是否同样的值。（等同于所有节点访问同一份最新的数据副本），换句话就是说，任何时刻，所用的应用程序都能访问得到相同的数据。</li>
 <li>可用性（A）：在集群中一部分节点故障后，集群整体是否还能响应客户端的读写请求。（对数据更新具备高可用性），换句话就是说，任何时候，任何应用程序都可以读写数据。</li>
 <li>分区容错性（P）：以实际效果而言，分区相当于对通信的时限要求。系统如果不能在时限内达成数据一致性，就意味着发生了分区的情况，必须就当前操作在C和A之间做出选择，换句话说，系统可以跨网络分区线性的伸缩和扩展。</li>
 </ul>
-<p>但是CAP三个特性不可能同时满足, 只能同时满足两个特性</p>
-<p>对大多数的分布式应用来说 CAP中的 P 是必不可少的</p>
-<p>所以我们一般都会从CA中选取一个, 一般会选择CP 或者 AP</p>
-<p>具体处理cap协议所有的方法如下图</p>
+<p>CAP三个特性不可能同时满足, 只能同时满足两个特性<br>对大多数的分布式应用来说 CAP中的 P 是必不可少的<br>所以我们一般都会从CA中选取一个, 一般会选择CP 或者 AP   </p>
+<p>具体处理cap协议的方法如下图</p>
 <p><img src="cap.jpg" alt="cap"></p>
-<h1 id="分布式中常用的协议"><a href="#分布式中常用的协议" class="headerlink" title="分布式中常用的协议"></a>分布式中常用的协议</h1><h2 id="Paxos"><a href="#Paxos" class="headerlink" title="Paxos"></a>Paxos</h2><p>使用者: Google Chubby</p>
-<p>paxos是解决分布式一致性最好的方案</p>
-<p>曾有人说 <code>paxos是唯一的一致性算法</code></p>
-<p>Paxos的最根本目的是通过一系列机器之间的沟通, 对某个数值达成一致</p>
-<p>具体详情网上相关文章很多</p>
-<h2 id="Raft"><a href="#Raft" class="headerlink" title="Raft"></a>Raft</h2><p>Raft协议主要是为了提供一个较低难度的分布式一致性算法实现</p>
-<p>因为Paxos难度颇高, 实现起来比较困难</p>
-<p>Raft也能达到Paxos一样的效果, 只是实现简单, 牺牲了一部分算法的稳定性</p>
-<h2 id="Gossip"><a href="#Gossip" class="headerlink" title="Gossip"></a>Gossip</h2><p>使用者: Redis</p>
-<p>Gossip协议是将自己的数据通知给集群内所有节点的协议, 但是不能做到数据一致性</p>
-<p>Gossip只能保证可用性和分区容忍性</p>
-<h2 id="ZAB协议"><a href="#ZAB协议" class="headerlink" title="ZAB协议"></a>ZAB协议</h2><p>使用者: zookeeper</p>
-<p>zk自己使用的一个一致性协议, zk中的选举策略就用到了该协议</p>
-<h2 id="NWR"><a href="#NWR" class="headerlink" title="NWR"></a>NWR</h2><p>R(读取分片数) + W(写入分片数) &gt; N(节点总分片数)</p>
-<p>只要满足以上公式, 我们必然可以拿到一个正确分片的数据</p>
-<p>举例: 我们对某个数据有5个分片, 我们只要保证 写入分片为3,读取分片为3,这样,我们必然可以保证读取的分片其中有一个是最新的数据 </p>
-<h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><p>解决分布式事物要处理ACID 四个问题</p>
-<p>常用如下方式</p>
+<h1 id="如何解决分区容忍性"><a href="#如何解决分区容忍性" class="headerlink" title="如何解决分区容忍性"></a>如何解决分区容忍性</h1><p>解决分区容忍性问题首先就是对数据进行分区或者叫分片</p>
+<p>分区手段有很多, 但大多分两种, hash分区和线性分区<br>系统将数据分为逻辑上的几个区块, 每个区块可以在多个机器上进行自由的部署和移动<br>这样就做到了将数据和机器进行隔离, 可以以分片为单位在不同机器上进行数据的移动和备份  </p>
+<h2 id="Gossip"><a href="#Gossip" class="headerlink" title="Gossip"></a>Gossip</h2><p>使用者: Redis<br>Gossip协议是节点将自己的数据通知给集群内所有节点的协议, 但是不能做到数据一致性<br>Gossip只能保证可用性和分区容忍性</p>
+<p>如果对数据的分片进行备份, 同时将备份分布到多个不同的网络节点上, 这样即便部分数据分区不可用, 在可容忍的范围内只要不是该分区的所有数据分片都出问题, 还是能提供正常的数据服务  </p>
+<p>数据分片是分布式存储的基础,数据分片好处很多    </p>
+<ol>
+<li>对数据分片可以使数据不受单机存储制约</li>
+<li>对数据分片可以通过多分区共同协作并行处理提高性能</li>
+<li>对分区数据进行冗余可以提高系统可用性</li>
+</ol>
+<p>但是数据分片和副本会带来一致性问题</p>
+<h1 id="如何保证数据一致性"><a href="#如何保证数据一致性" class="headerlink" title="如何保证数据一致性"></a>如何保证数据一致性</h1><p>目前业界的普遍做法是将多分区及其副本形成一个小组, 组内选举一个primary分区来执行写操作, 其他分区仅提供读操作或根本只提供备份功能, 这样对外部系统只有一个主要分片做写入操作, 就可以保证数据写入的一致性</p>
+<p>如何从多个分区中选举主分区就涉及到选举算法</p>
+<h2 id="Paxos"><a href="#Paxos" class="headerlink" title="Paxos"></a>Paxos</h2><p>使用者: Google Chubby<br>paxos是解决分布式一致性最好的方案<br>曾有人说 <code>paxos是唯一的一致性算法</code><br>Paxos的最根本目的是通过一系列机器之间的沟通, 对某个数值达成一致<br>具体详情网上相关文章很多</p>
+<h2 id="Raft"><a href="#Raft" class="headerlink" title="Raft"></a>Raft</h2><p>使用者: TiDB<br>Raft协议主要是为了提供一个较低难度的分布式一致性算法实现<br>因为Paxos难度颇高, 实现起来比较困难<br>Raft也能达到Paxos一样的效果, 只是实现简单, 牺牲了一部分算法的稳定性   </p>
+<h2 id="ZAB协议"><a href="#ZAB协议" class="headerlink" title="ZAB协议"></a>ZAB协议</h2><p>使用者: zookeeper<br>zk自己使用的一个一致性协议, zk中的选举策略就用到了该协议    </p>
+<h2 id="Bully"><a href="#Bully" class="headerlink" title="Bully"></a>Bully</h2><p>使用者: Elasticsearch, MongoDB</p>
+<h2 id="NRW算法"><a href="#NRW算法" class="headerlink" title="NRW算法"></a>NRW算法</h2><p>NRW是一种特殊的保障一致性的算法, 具体详情如下:<br>R(读取分片数) + W(写入分片数) &gt; N(节点总分片数)<br>只要满足以上公式, 我们必然可以拿到一个正确分片的数据<br>举例: 我们对某个数据有5个分片, 我们只要保证 写入分片为3,读取分片为3,这样,我们必然可以保证读取的分片其中有一个是最新的数据 </p>
+<h1 id="如何处理可用性"><a href="#如何处理可用性" class="headerlink" title="如何处理可用性"></a>如何处理可用性</h1><p>实现高可用一般都是通过节点或数据备份来实现, 采用主从或主备节点, 主节点或主分片不可用, 就采用副本分片或备份节点替代原有的服务</p>
+<h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><p>解决分布式事物要处理ACID 四个问题<br>常用如下方式</p>
 <ol>
 <li>2PC, 使用者: mysql, 两阶段提交协议</li>
 <li>3PC, 三阶段提交协议, 二阶段提交协议的优化</li>
-<li>选取master主分片操作</li>
 <li>TCC  事务补偿</li>
 </ol>
-<h1 id="数据分片"><a href="#数据分片" class="headerlink" title="数据分片"></a>数据分片</h1><p>解决大数据问题首先就是对数据进行分区</p>
-<p>分区手段有很多, 但大多分两种, hash分区和线性分区</p>
-<p>系统将数据分为逻辑上的几个区块, 每个区块可以在多个机器上进行自由的部署和移动</p>
-<p>这样就做到了将数据和机器进行隔离, 可以以分片为单位在不同机器上进行数据的移动和备份</p>
-<p>数据分片是分布式存储的基础</p>
 
       
     </div>
@@ -757,8 +751,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017-12-08-for-reading-book/" rel="prev" title="请不要再说不喜欢怀着目的去读书">
-                请不要再说不喜欢怀着目的去读书 <i class="fa fa-chevron-right"></i>
+              <a href="/2017-12-29-programming-languages-are-not-tools/" rel="prev" title="程序语言不是工具">
+                程序语言不是工具 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -837,7 +831,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">48</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -973,7 +967,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-count">43</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -1057,7 +1051,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式服务常用的设计思想"><span class="nav-number">1.</span> <span class="nav-text">分布式服务常用的设计思想</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式要解决的常见问题"><span class="nav-number">1.1.</span> <span class="nav-text">分布式要解决的常见问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式中常用的协议"><span class="nav-number">2.</span> <span class="nav-text">分布式中常用的协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Paxos"><span class="nav-number">2.1.</span> <span class="nav-text">Paxos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Raft"><span class="nav-number">2.2.</span> <span class="nav-text">Raft</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gossip"><span class="nav-number">2.3.</span> <span class="nav-text">Gossip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZAB协议"><span class="nav-number">2.4.</span> <span class="nav-text">ZAB协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NWR"><span class="nav-number">2.5.</span> <span class="nav-text">NWR</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式事务"><span class="nav-number">3.</span> <span class="nav-text">分布式事务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据分片"><span class="nav-number">4.</span> <span class="nav-text">数据分片</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是分布式"><span class="nav-number">1.</span> <span class="nav-text">什么是分布式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式要解决的常见问题"><span class="nav-number">1.1.</span> <span class="nav-text">分布式要解决的常见问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何解决分区容忍性"><span class="nav-number">2.</span> <span class="nav-text">如何解决分区容忍性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gossip"><span class="nav-number">2.1.</span> <span class="nav-text">Gossip</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何保证数据一致性"><span class="nav-number">3.</span> <span class="nav-text">如何保证数据一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Paxos"><span class="nav-number">3.1.</span> <span class="nav-text">Paxos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Raft"><span class="nav-number">3.2.</span> <span class="nav-text">Raft</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZAB协议"><span class="nav-number">3.3.</span> <span class="nav-text">ZAB协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bully"><span class="nav-number">3.4.</span> <span class="nav-text">Bully</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NRW算法"><span class="nav-number">3.5.</span> <span class="nav-text">NRW算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何处理可用性"><span class="nav-number">4.</span> <span class="nav-text">如何处理可用性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式事务"><span class="nav-number">5.</span> <span class="nav-text">分布式事务</span></a></li></ol></div>
             
 
           </div>
