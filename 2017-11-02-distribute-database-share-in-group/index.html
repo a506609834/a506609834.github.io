@@ -117,7 +117,7 @@
 <meta property="og:description" content="这个是写给组内成员的分布式知识简单分享 什么是分布式什么是集群? 什么是分布式?集群:   一个任务多个人可以做(实际是一个人做),通过冗余解决单点故障问题分布式: 一个任务拆分成多个部分由多个人来做,解决业务解耦,水平扩展和性能问题    几个典型的分布式系统:    名称 类型 数据分布方式 故障转移 底层存储     kafka 消息系统 broker-&amp;gt;partition parti">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://leriou.github.io/2017-11-02-distribute-database-share-in-group/cap.jpg">
-<meta property="og:updated_time" content="2019-01-20T13:50:17.882Z">
+<meta property="og:updated_time" content="2019-01-21T14:16:03.008Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式服务组内分享">
 <meta name="twitter:description" content="这个是写给组内成员的分布式知识简单分享 什么是分布式什么是集群? 什么是分布式?集群:   一个任务多个人可以做(实际是一个人做),通过冗余解决单点故障问题分布式: 一个任务拆分成多个部分由多个人来做,解决业务解耦,水平扩展和性能问题    几个典型的分布式系统:    名称 类型 数据分布方式 故障转移 底层存储     kafka 消息系统 broker-&amp;gt;partition parti">
@@ -476,7 +476,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-01-20 21:50:17" itemprop="dateModified" datetime="2019-01-20T21:50:17+08:00">2019-01-20</time>
+                <time title="Modified: 2019-01-21 22:16:03" itemprop="dateModified" datetime="2019-01-21T22:16:03+08:00">2019-01-21</time>
               
             
           </span>
@@ -619,7 +619,13 @@
 <li>对分区数据进行冗余可以提高系统可用性</li>
 </ol>
 <p>但是数据分片和副本会带来一致性问题</p>
-<h1 id="如何保证数据一致性"><a href="#如何保证数据一致性" class="headerlink" title="如何保证数据一致性"></a>如何保证数据一致性</h1><p>目前业界的普遍做法是将多分区及其副本形成一个小组, 组内选举一个primary分区来执行写操作, 其他分区仅提供读操作或根本只提供备份功能, 这样对外部系统只有一个主要分片做写入操作, 就可以保证数据写入的一致性</p>
+<h1 id="如何保证数据一致性"><a href="#如何保证数据一致性" class="headerlink" title="如何保证数据一致性"></a>如何保证数据一致性</h1><h2 id="单节点的数据一致性"><a href="#单节点的数据一致性" class="headerlink" title="单节点的数据一致性"></a>单节点的数据一致性</h2><p>单节点如何保证数据一致性和完整性</p>
+<p>比如: 数据库索引的更新, B树在分裂过程中出现问题怎么办, </p>
+<p>一般处理单节点的一致性可以用 WAL(预写日志,或者叫redo日志) 或者 写时复制(copy on write)</p>
+<p>WAL就是先把操作追加到一个日志文件, 然后再对内存进行操作, lsm树中的memtable就是典型的使用这种方案</p>
+<p>写时复制就是先在其他地方把数据处理完毕, 最后直接修改数据引用, gfs的快照技术有使用类似的方案</p>
+<p>典型的例子是 修改B+树时预先生成一个小的B+树, 然后直接替换B+树上的节点指针</p>
+<h2 id="分布式的一致性"><a href="#分布式的一致性" class="headerlink" title="分布式的一致性"></a>分布式的一致性</h2><p>目前业界的普遍做法是将多分区及其副本形成一个小组, 组内选举一个primary分区来执行写操作, 其他分区仅提供读操作或根本只提供备份功能, 这样对外部系统只有一个主要分片做写入操作, 就可以保证数据写入的一致性</p>
 <p>如何从多个分区中选举主分区就涉及到选举算法</p>
 <h2 id="Paxos"><a href="#Paxos" class="headerlink" title="Paxos"></a>Paxos</h2><p>使用者: Google Chubby<br>paxos是解决分布式一致性最好的方案<br>曾有人说 <code>paxos是唯一的一致性算法</code><br>Paxos的最根本目的是通过一系列机器之间的沟通, 对某个数值达成一致<br>具体详情网上相关文章很多</p>
 <h2 id="Raft"><a href="#Raft" class="headerlink" title="Raft"></a>Raft</h2><p>使用者: TiDB<br>Raft协议主要是为了提供一个较低难度的分布式一致性算法实现<br>因为Paxos难度颇高, 实现起来比较困难<br>Raft也能达到Paxos一样的效果, 只是实现简单, 牺牲了一部分算法的稳定性   </p>
@@ -1051,7 +1057,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是分布式"><span class="nav-number">1.</span> <span class="nav-text">什么是分布式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式要解决的常见问题"><span class="nav-number">1.1.</span> <span class="nav-text">分布式要解决的常见问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何解决分区容忍性"><span class="nav-number">2.</span> <span class="nav-text">如何解决分区容忍性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gossip"><span class="nav-number">2.1.</span> <span class="nav-text">Gossip</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何保证数据一致性"><span class="nav-number">3.</span> <span class="nav-text">如何保证数据一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Paxos"><span class="nav-number">3.1.</span> <span class="nav-text">Paxos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Raft"><span class="nav-number">3.2.</span> <span class="nav-text">Raft</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZAB协议"><span class="nav-number">3.3.</span> <span class="nav-text">ZAB协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bully"><span class="nav-number">3.4.</span> <span class="nav-text">Bully</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NRW算法"><span class="nav-number">3.5.</span> <span class="nav-text">NRW算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何处理可用性"><span class="nav-number">4.</span> <span class="nav-text">如何处理可用性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式事务"><span class="nav-number">5.</span> <span class="nav-text">分布式事务</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是分布式"><span class="nav-number">1.</span> <span class="nav-text">什么是分布式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式要解决的常见问题"><span class="nav-number">1.1.</span> <span class="nav-text">分布式要解决的常见问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何解决分区容忍性"><span class="nav-number">2.</span> <span class="nav-text">如何解决分区容忍性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gossip"><span class="nav-number">2.1.</span> <span class="nav-text">Gossip</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何保证数据一致性"><span class="nav-number">3.</span> <span class="nav-text">如何保证数据一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单节点的数据一致性"><span class="nav-number">3.1.</span> <span class="nav-text">单节点的数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式的一致性"><span class="nav-number">3.2.</span> <span class="nav-text">分布式的一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Paxos"><span class="nav-number">3.3.</span> <span class="nav-text">Paxos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Raft"><span class="nav-number">3.4.</span> <span class="nav-text">Raft</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZAB协议"><span class="nav-number">3.5.</span> <span class="nav-text">ZAB协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bully"><span class="nav-number">3.6.</span> <span class="nav-text">Bully</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NRW算法"><span class="nav-number">3.7.</span> <span class="nav-text">NRW算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何处理可用性"><span class="nav-number">4.</span> <span class="nav-text">如何处理可用性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式事务"><span class="nav-number">5.</span> <span class="nav-text">分布式事务</span></a></li></ol></div>
             
 
           </div>
