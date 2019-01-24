@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="Leriou&#39;s Tavern">
 <meta property="og:description" content="MongoDB  vs Elasticsearch    MongoDB ElasticSearch 备注     定位 (文档型)数据库 (文档型)搜索引擎 一个管理数据,一个检索数据   资源占用 一般 高 mongo使用c++, es使用Java开发   写入延迟 低 高 es的写入延迟默认1s, 可配置, 但是要牺牲一些东西   全文索引支持度 一般 非常好 es本来就是搜索引擎, 这个没">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-01-20T11:50:54.616Z">
+<meta property="og:updated_time" content="2019-01-24T14:40:15.767Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MongoDB和Elasticsearch的对比">
 <meta name="twitter:description" content="MongoDB  vs Elasticsearch    MongoDB ElasticSearch 备注     定位 (文档型)数据库 (文档型)搜索引擎 一个管理数据,一个检索数据   资源占用 一般 高 mongo使用c++, es使用Java开发   写入延迟 低 高 es的写入延迟默认1s, 可配置, 但是要牺牲一些东西   全文索引支持度 一般 非常好 es本来就是搜索引擎, 这个没">
@@ -474,7 +474,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-01-20 19:50:54" itemprop="dateModified" datetime="2019-01-20T19:50:54+08:00">2019-01-20</time>
+                <time title="Modified: 2019-01-24 22:40:15" itemprop="dateModified" datetime="2019-01-24T22:40:15+08:00">2019-01-24</time>
               
             
           </span>
@@ -581,6 +581,12 @@
 <td>MongoDB在大部分场景性能比es强的多得多</td>
 </tr>
 <tr>
+<td style="text-align:center">索引结构</td>
+<td style="text-align:center">B树</td>
+<td style="text-align:center">LSM树</td>
+<td>es追求写入吞吐量, MongoDB读写比较均衡</td>
+</tr>
+<tr>
 <td style="text-align:center">操作接口</td>
 <td style="text-align:center">TCP</td>
 <td style="text-align:center">Restful(Http)</td>
@@ -636,11 +642,11 @@
 </tr>
 </tbody>
 </table>
-<h2 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h2><p>MongoDB和Elasticsearch虽然很多功能和特性高度重合, 但是定位完全不同     </p>
+<h2 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h2><p>MongoDB和Elasticsearch都属于NoSQL大家族, 且都属于文档型数据存储</p>
+<p>但这两者虽然很多功能和特性高度重合, 但是定位完全不同     </p>
 <p>MongoDB 是 <strong>文档型数据库</strong>,  提供 <strong>数据存储和管理服务</strong></p>
 <p>Elasticsearch 是<strong>搜索引擎</strong>, 提供 <strong>数据检索服务</strong></p>
-<p>两者的很大区别在于 <strong>元数据</strong>(没有写错, 不是源数据)的存储和管理, MongoDB作为一个数据库产品, 是可以作为<strong>元数据</strong>管理者的     </p>
-<p>Elasticsearch作为一个搜索引擎, 定位是<strong>提供数据检索服务</strong>, 也就是说我只管查, 不管写 ^_^, Elasticsearch的Mapping不可变也是为此服务的, 带来的代价就是<code>es不适合作为数据管理者</code>, es可以从其他数据源同步数据过来提供查询, 但是不适合自己对数据进行存储和管理 </p>
+<p>两者的很大区别在于 <strong>元数据</strong>(没有写错, 不是源数据)的存储和管理, MongoDB作为一个数据库产品, 是可以作为<strong>元数据</strong>管理者的<br>Elasticsearch作为一个搜索引擎, 定位是<strong>提供数据检索服务</strong>, 也就是说我只管查, 不管写 ^_^, Elasticsearch的Mapping不可变也是为此服务的, 带来的代价就是<code>es不适合作为数据管理者</code>, es可以从其他数据源同步数据过来提供查询, 但是不适合自己对数据进行存储和管理 </p>
 <blockquote>
 <p>ps:  修改Mapping的代价非常高, 所以我们一般都是把新数据重新写入一份然后直接切换别名到新的索引</p>
 </blockquote>
@@ -671,12 +677,15 @@
 </ul>
 <p>MongoDB的副本和分片是两种不同的模式, 虽然可以同时使用但是依然有各自的架构设计, 用户可以任意选择选型进行搭配, 每个节点的职责更加转一, 方便据此调整机器配置</p>
 <p>Elasticsearch中则是分片 + 副本是一套统一的架构设计, 每个节点具有接近同等的地位, 配置使用起来更加简单, 但是如果要针对节点所负责的功能对机器进一步做定制就不如MongoDB灵活</p>
-<h2 id="文档型数据库的问题"><a href="#文档型数据库的问题" class="headerlink" title="文档型数据库的问题"></a>文档型数据库的问题</h2><h3 id="无schema"><a href="#无schema" class="headerlink" title="无schema"></a>无schema</h3><p>我个人很喜欢这个特性, 但是有得有失, 很多固定schema的好处就无法享受到了</p>
-<h3 id="鸡肋的Collection和Type"><a href="#鸡肋的Collection和Type" class="headerlink" title="鸡肋的Collection和Type"></a>鸡肋的Collection和Type</h3><p>对于文档型数据库来讲, collection/type的意义其实不大, Nosql数据库中极少有数据库跟传统的关系型数据库一样保持类似( 库-&gt;表 ) 的对应关系, 因为这个真的没有什么必要^_^</p>
-<p>Elasticsearch从<code>6.x</code>版本开始强制只允许一个索引使用一个type, 其实就是不想让你用这个type类型, 到了es的7.x版本会默认取消type类型, 就说明这个type字段真的是鸡肋的不行</p>
-<h3 id="弱事务"><a href="#弱事务" class="headerlink" title="弱事务"></a>弱事务</h3><p>MongoDB以前只是支持统一文档内的原子更新,以此来实现伪事务功能, 不过Mongo4.0 以后大大加强了事务方面的能力 </p>
-<h3 id="无join支持"><a href="#无join支持" class="headerlink" title="无join支持"></a>无join支持</h3><p>文档型数据库都不支持join, 但是我也用不上join的功能 ,不过据说未来Mongo4.2版本会带来对join的支持</p>
-<p>不支持join带来的问题就是我们需要自己对数据进行连接, 但是这并非不能解决的问题, 相应的对使用SQL的数据分析师就不大友好</p>
+<h2 id="文档型数据库的问题"><a href="#文档型数据库的问题" class="headerlink" title="文档型数据库的问题"></a>文档型数据库的问题</h2><h3 id="无schema"><a href="#无schema" class="headerlink" title="无schema"></a>无schema</h3><p>文档型数据存储既能享受无schema限制的灵活, 又能享受索引查询的快速和类SQL查询的便捷</p>
+<p>使他们用起来不像传统的RDBMS, 图数据库(Neo4j)那么麻烦, 又不像 Redis,Hbase这种数据库查询功能不够强大, 处于一个传统RDBMS和经典K-V存储之间的位置</p>
+<p>我个人很喜欢这个特性, 没有schema的限制, 存储数据更方便也更灵活了</p>
+<p>但是有得有失, 很多固定schema的好处就无法享受到了, 比如: 对数据的高效压缩</p>
+<h3 id="鸡肋的Collection和Type"><a href="#鸡肋的Collection和Type" class="headerlink" title="鸡肋的Collection和Type"></a>鸡肋的Collection和Type</h3><p>对于文档型数据库来讲, collection/type的意义其实不大, Nosql数据库中极少有数据库跟传统的关系型数据库一样保持类似( 库-&gt;表 ) 的对应关系, 因为这个真的没有什么必要 ^_^</p>
+<p>Elasticsearch从<code>6.x</code>版本开始强制只允许一个索引使用一个type, 其实就是意识到这个这个设计失误, 不想让你用这个type类型, 到了es的7.x版本会默认取消type类型, 就说明这个type字段真的是鸡肋的不行</p>
+<h3 id="弱事务"><a href="#弱事务" class="headerlink" title="弱事务"></a>弱事务</h3><p>MongoDB以前只是支持统一文档内的原子更新,以此来实现伪事务功能, 不过Mongo4.0支持Replica Set事务, 大大加强了事务方面的能力 </p>
+<h3 id="无join支持"><a href="#无join支持" class="headerlink" title="无join支持"></a>无join支持</h3><p>文档型数据库大多数都不支持join(也有少量支持的), 但是我也用不上join的功能 ,不过据说未来Mongo4.2版本会带来对join的支持</p>
+<p>不支持join带来的问题就是我们需要自己对数据进行连接, 但是这并非不能解决的问题, 相应的缺少join功能对善于使用SQL的数据分析师就不大友好</p>
 <h3 id="Bully的选主算法的缺陷"><a href="#Bully的选主算法的缺陷" class="headerlink" title="Bully的选主算法的缺陷"></a>Bully的选主算法的缺陷</h3><p>elasticsearch和MongoDB选择的选主算法实现很简单, 但是有几率出现脑裂的情况, 当然, 具体情况跟配置也有关系(比如:你有三个es节点但是设置的最小主节点数为1, 将最小主节点数设置为2可以避免脑裂情况)</p>
 <p>即使出现了脑裂的情况, 使用<code>重启大法</code>一般就能解决 ^_^</p>
 <p>总体来说, 这方面不如使用Paxos和Raft算法的其他分布式系统靠谱</p>
